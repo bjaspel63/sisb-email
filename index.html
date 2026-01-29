@@ -3,23 +3,14 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Email Quest Runner (Grade 1)</title>
+<title>Email Runner (75/25 + Auto Check)</title>
 <style>
   :root{
-    --bg1:#fff1f8;
-    --bg2:#e9fbff;
-    --ink:#1f2a37;
-    --muted:#5b6b7a;
-    --purple:#6c63ff;
-    --blue:#00c2ff;
-    --green:#22c55e;
-    --orange:#f59e0b;
-    --red:#ef4444;
-    --card:#ffffffcc;
-    --stroke: rgba(31,42,55,.12);
-    --stroke2: rgba(108,99,255,.18);
-    --shadow: 0 16px 40px rgba(0,0,0,.14);
-    --radius: 24px;
+    --bg1:#fff1f8; --bg2:#e9fbff;
+    --ink:#1f2a37; --muted:#5b6b7a;
+    --purple:#6c63ff; --blue:#00c2ff; --green:#22c55e; --orange:#f59e0b; --red:#ef4444;
+    --card:#ffffffcc; --stroke: rgba(31,42,55,.12); --stroke2: rgba(108,99,255,.18);
+    --shadow: 0 16px 40px rgba(0,0,0,.14); --radius: 22px;
   }
   *{ box-sizing:border-box; }
   html,body{ height:100%; }
@@ -28,231 +19,250 @@
     font-family: ui-rounded, "Comic Sans MS", "Trebuchet MS", system-ui, -apple-system, Segoe UI, Arial;
     color:var(--ink);
     background:
-      radial-gradient(1200px 800px at 15% 10%, var(--bg1), transparent 62%),
-      radial-gradient(1200px 800px at 85% 35%, var(--bg2), transparent 62%),
+      radial-gradient(1100px 800px at 15% 10%, var(--bg1), transparent 62%),
+      radial-gradient(1100px 800px at 85% 35%, var(--bg2), transparent 62%),
       linear-gradient(180deg, #ffffff, #f7fbff);
-    padding: 14px;
+    padding: 12px;
   }
-  body::before{
-    content:"";
-    position:fixed; inset:0; pointer-events:none; opacity:.22;
-    background-image:
-      radial-gradient(circle at 25% 20%, rgba(108,99,255,.35) 0 6px, transparent 7px),
-      radial-gradient(circle at 75% 30%, rgba(0,194,255,.35) 0 7px, transparent 8px),
-      radial-gradient(circle at 35% 78%, rgba(34,197,94,.35) 0 6px, transparent 7px),
-      radial-gradient(circle at 80% 80%, rgba(245,158,11,.35) 0 7px, transparent 8px);
-    background-size: 220px 220px;
-    mix-blend-mode:multiply;
-  }
+  .wrap{ max-width: 1300px; margin:0 auto; height: calc(100vh - 24px); display:flex; flex-direction:column; gap:10px; }
 
-  .wrap{ max-width: 1100px; margin: 0 auto; position:relative; }
-  header{
-    display:flex; gap:12px; flex-wrap:wrap; align-items:stretch; justify-content:space-between;
-    margin-bottom: 12px;
-  }
-  .hero{
-    flex:1;
-    background:var(--card);
-    border:2px solid var(--stroke2);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 12px 14px;
-    min-width: 280px;
-    position:relative;
-    overflow:hidden;
-  }
-  .hero::after{
-    content:"";
-    position:absolute; right:-50px; top:-40px;
-    width:220px; height:220px; border-radius:50%;
-    background: radial-gradient(circle at 30% 30%, rgba(108,99,255,.18), transparent 62%);
-    transform: rotate(12deg);
-  }
-
-  .topRow{
-    display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
-    position:relative; z-index:2;
-  }
-  .brand{ display:flex; align-items:center; gap:10px; }
-  .mascot{
-    width:52px; height:52px; border-radius:18px; display:grid; place-items:center;
-    background: linear-gradient(135deg, rgba(108,99,255,.18), rgba(0,194,255,.18));
-    border:2px solid rgba(108,99,255,.18);
-    box-shadow: 0 10px 22px rgba(0,0,0,.12);
-    font-size: 30px;
-    transform: rotate(-3deg);
-  }
-  h1{ margin:0; font-size: 20px; }
-  .sub{ margin:2px 0 0; font-size: 13px; font-weight: 900; color: var(--muted); }
-
-  .hudRow{
-    display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; align-items:center;
-  }
-  .pill{
-    display:flex; align-items:center; gap:8px;
-    padding: 8px 10px;
-    border-radius: 999px;
-    background: rgba(255,255,255,.88);
-    border:2px solid var(--stroke);
-    box-shadow: 0 10px 18px rgba(0,0,0,.10);
-    font-weight: 1000;
-    user-select:none;
-  }
-  .hearts{ letter-spacing:2px; }
-  .stars{ letter-spacing:2px; }
-  .controls{
-    display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end;
-    min-width: 310px;
-  }
-  .nameBox{
-    display:flex; align-items:center; gap:8px;
-    padding: 10px 12px;
-    border-radius: 999px;
-    background: rgba(255,255,255,.88);
-    border:2px solid var(--stroke);
-    box-shadow: 0 12px 22px rgba(0,0,0,.12);
-  }
-  .nameBox label{ font-size:12px; font-weight:1000; color:var(--muted); }
-  .nameBox input{
-    width: 170px;
-    border:0; outline:none;
-    background: transparent;
-    font-weight: 1000;
-    font-size: 14px;
-  }
-
-  .btn{
-    border:0;
-    border-radius: 999px;
-    padding: 12px 14px;
-    cursor:pointer;
-    font-weight: 1100;
-    box-shadow: 0 12px 22px rgba(0,0,0,.12);
-    background:#fff;
-    color:var(--ink);
-    border:2px solid rgba(108,99,255,.16);
-    user-select:none;
-    display:flex; align-items:center; gap:8px;
-    transition: transform .06s ease, filter .2s ease;
-    white-space:nowrap;
-  }
-  .btn:hover{ filter: brightness(1.02); }
-  .btn:active{ transform: translateY(1px) scale(.99); }
-  .btnPrimary{ background: linear-gradient(135deg, var(--purple), var(--blue)); color:#fff; border:0; }
-  .btnSoft{ background: rgba(34,197,94,.14); border:2px solid rgba(34,197,94,.26); }
-  .btnWarn{ background: rgba(245,158,11,.14); border:2px solid rgba(245,158,11,.26); }
-
-  .bar{
-    margin-top: 10px;
-    background: rgba(255,255,255,.75);
-    border:2px solid var(--stroke);
-    border-radius:999px;
-    padding:6px;
-    position:relative;
-    z-index:2;
-    box-shadow: 0 10px 18px rgba(0,0,0,.08);
-  }
-  .barTrack{
-    height: 14px; border-radius:999px;
-    background: linear-gradient(90deg, rgba(108,99,255,.30), rgba(0,194,255,.30));
-    overflow:hidden;
-  }
-  .barFill{
-    height:100%;
-    width:0%;
-    border-radius:999px;
-    background: linear-gradient(90deg, var(--purple), var(--blue));
-    transition: width .25s ease;
-  }
-  .barText{
-    margin-top: 6px;
-    font-size: 12px;
-    font-weight: 900;
-    color: var(--muted);
-    display:flex; gap:10px; flex-wrap:wrap;
-    justify-content:space-between;
-    align-items:center;
-  }
-
-  .main{
-    display:grid;
-    grid-template-columns: 1.1fr .9fr;
-    gap: 12px;
-  }
-  @media (max-width: 920px){ .main{ grid-template-columns:1fr; } }
-
-  .panel{
+  /* Top HUD */
+  .hud{
     background: var(--card);
     border:2px solid var(--stroke2);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
-    padding: 12px;
-    position:relative;
-    overflow:hidden;
+    padding: 10px 12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    flex-wrap:wrap;
   }
-  .panelHead{
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .logo{
+    width:48px; height:48px; border-radius:18px;
+    display:grid; place-items:center;
+    background: linear-gradient(135deg, rgba(108,99,255,.18), rgba(0,194,255,.18));
+    border:2px solid rgba(108,99,255,.18);
+    box-shadow: 0 10px 22px rgba(0,0,0,.12);
+    font-size: 28px;
+  }
+  h1{ margin:0; font-size:18px; }
+  .sub{ margin:0; font-size:12px; font-weight:900; color:var(--muted); }
+
+  .pills{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
+  .pill{
+    background: rgba(255,255,255,.9);
+    border:2px solid var(--stroke);
+    border-radius:999px;
+    padding: 8px 10px;
+    font-weight:1000;
+    box-shadow: 0 10px 18px rgba(0,0,0,.10);
+    user-select:none;
+    display:flex; align-items:center; gap:8px;
+  }
+  .nameBox{
+    background: rgba(255,255,255,.9);
+    border:2px solid var(--stroke);
+    border-radius:999px;
+    padding: 8px 10px;
+    box-shadow: 0 10px 18px rgba(0,0,0,.10);
+    display:flex; align-items:center; gap:8px;
+    font-weight:1000;
+  }
+  .nameBox label{ font-size:12px; font-weight:1000; color:var(--muted); }
+  .nameBox input{
+    border:0; outline:none; background:transparent;
+    width:160px; font-weight:1000;
+  }
+  .btn{
+    border:0;
+    border-radius:999px;
+    padding: 10px 12px;
+    cursor:pointer;
+    font-weight:1100;
+    box-shadow: 0 12px 22px rgba(0,0,0,.12);
+    background:#fff;
+    border:2px solid rgba(108,99,255,.16);
+    display:flex; align-items:center; gap:8px;
+    user-select:none;
+  }
+  .btn:active{ transform: translateY(1px) scale(.99); }
+  .btnPrimary{ background: linear-gradient(135deg, var(--purple), var(--blue)); border:0; color:#fff; }
+
+  /* 75/25 layout */
+  .layout{
+    flex:1;
+    display:flex;
+    gap:10px;
+    min-height:0; /* allow children scroll if needed */
+  }
+  .left{
+    flex: 3; /* 75% */
+    min-width: 0;
+    background: var(--card);
+    border:2px solid var(--stroke2);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 10px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .right{
+    flex: 1; /* 25% */
+    min-width: 260px;
+    background: var(--card);
+    border:2px solid var(--stroke2);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 10px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    overflow:auto;
+  }
+  @media (max-width: 980px){
+    .layout{ flex-direction:column; }
+    .right{ min-width: 0; }
+  }
+
+  .sectionTitle{
     display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
-    margin-bottom: 10px;
   }
-  .panelHead h2{ margin:0; font-size: 16px; }
-  .help{ margin:0; font-size: 13px; font-weight: 900; color: var(--muted); }
+  .sectionTitle h2{ margin:0; font-size:14px; }
+  .help{ margin:0; font-size:12px; font-weight:900; color:var(--muted); }
 
-  /* GAME AREA */
   .gameWrap{
-    position:relative;
-    border-radius: 20px;
+    flex:1;
+    min-height: 0;
+    border-radius: 18px;
     border:2px solid rgba(31,42,55,.12);
-    background: rgba(255,255,255,.88);
+    background: rgba(255,255,255,.9);
     overflow:hidden;
+    position: relative;
   }
-  canvas{ display:block; width:100%; height:auto; }
+  canvas{ width:100%; height:100%; display:block; }
 
-  /* Right: Backpack + email preview */
-  .backpack{
-    display:grid;
-    gap: 10px;
+  /* Little pause hint (optional but helpful) */
+  .pauseBadge{
+    position:absolute;
+    left: 12px;
+    top: 12px;
+    padding: 8px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.92);
+    border: 2px solid rgba(31,42,55,.12);
+    box-shadow: 0 10px 18px rgba(0,0,0,.10);
+    font-weight: 1100;
+    display:none;
+    z-index: 5;
   }
+
   .card{
     background: rgba(255,255,255,.92);
-    border-radius: 20px;
     border:2px solid rgba(31,42,55,.12);
+    border-radius: 18px;
     padding: 10px;
   }
   .cardTitle{
-    display:flex; align-items:center; justify-content:space-between; gap:10px;
-    font-weight: 1100;
+    font-weight:1100;
+    display:flex; justify-content:space-between; align-items:center; gap:8px;
     margin-bottom: 8px;
   }
-  .slots{
-    display:grid;
-    gap: 8px;
-  }
+  .mini{ font-size:12px; font-weight:900; color:var(--muted); }
+
   .slot{
-    display:flex; align-items:center; justify-content:space-between; gap:10px;
     padding: 10px 12px;
-    border-radius: 16px;
+    border-radius: 14px;
     border:2px dashed rgba(31,42,55,.20);
-    background: #fff;
-    font-weight: 1000;
+    background:#fff;
+    font-weight:1000;
+    margin-bottom: 8px;
   }
   .slot.empty{ color: rgba(31,42,55,.45); }
-  .mini{ font-size:12px; font-weight:900; color: var(--muted); }
-
-  .previewBox{
+  .preview{
     white-space: pre-wrap;
     line-height: 1.5;
-    font-weight: 1000;
-    background: #fff;
-    border: 2px solid rgba(31,42,55,.10);
-    border-radius: 16px;
-    padding: 10px;
-    min-height: 120px;
+    font-weight:1000;
+    background:#fff;
+    border:2px solid rgba(31,42,55,.10);
+    border-radius:14px;
+    padding:10px;
+    min-height: 140px;
   }
+
+  /* Popup */
+  .overlay{
+    position:fixed; inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding: 16px;
+    background: rgba(15,23,42,.55);
+    z-index: 50;
+  }
+  .modal{
+    width: min(780px, 100%);
+    background:#fff;
+    border-radius: 24px;
+    border:2px solid rgba(108,99,255,.20);
+    box-shadow: var(--shadow);
+    padding: 14px;
+  }
+
+
+.certModal{
+  width: min(980px, 100%);
+  max-height: 92vh;
+  overflow: hidden;
+  display:flex;
+  flex-direction:column;
+}
+.certPreview{
+  flex:1;
+  overflow:auto;
+  padding: 10px;
+  border-radius: 18px;
+  border:2px solid rgba(31,42,55,.10);
+  background: rgba(255,255,255,.9);
+}
+#certImg{
+  width: 100%;
+  height: auto;
+  display:block;
+  border-radius: 18px;
+  box-shadow: 0 16px 40px rgba(0,0,0,.14);
+}
+.certActions{
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  padding-top: 10px;
+}
+
+  .modalTop{
+    display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
+    margin-bottom: 8px;
+  }
+  .bigStars{ font-size: 44px; text-align:center; margin: 6px 0 10px; }
+  .modalBody{
+    font-weight:1000;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .actions{
+    margin-top: 12px;
+    display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap;
+  }
+  .btnSoft{ background: rgba(34,197,94,.14); border:2px solid rgba(34,197,94,.26); }
+  .btnWarn{ background: rgba(245,158,11,.14); border:2px solid rgba(245,158,11,.26); }
 
   .toast{
     position:fixed;
     left:50%;
-    bottom: 18px;
+    bottom: 14px;
     transform: translateX(-50%);
     background: rgba(255,255,255,.96);
     border: 2px solid rgba(31,42,55,.12);
@@ -260,208 +270,166 @@
     padding: 10px 14px;
     box-shadow: var(--shadow);
     display:none;
-    max-width: min(860px, calc(100vw - 24px));
     font-weight: 1100;
-    z-index: 80;
-  }
-
-  /* Modals */
-  .overlay{
-    position:fixed; inset:0;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding: 18px;
-    background: rgba(15,23,42,.55);
-    z-index: 90;
-  }
-  .modal{
-    width: min(820px, 100%);
-    background:#fff;
-    border-radius: 26px;
-    border:2px solid rgba(108,99,255,.20);
-    box-shadow: var(--shadow);
-    padding: 14px;
-  }
-  .modalTop{
-    display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
-    margin-bottom: 8px;
-  }
-  .modalTop h3{ margin:0; }
-  .bigStars{ font-size: 44px; text-align:center; margin: 8px 0; }
-  .safeBox{
-    background: rgba(0,194,255,.10);
-    border: 2px solid rgba(0,194,255,.22);
-    border-radius: 18px;
-    padding: 10px;
-    margin-top: 10px;
-    font-weight: 1000;
-  }
-
-  /* Confetti */
-  .confetti{
-    position: fixed;
-    inset: 0;
-    pointer-events:none;
-    overflow:hidden;
-    display:none;
-    z-index: 120;
-  }
-  .confetti i{
-    position:absolute;
-    width: 10px; height: 16px;
-    border-radius: 4px;
-    opacity:.9;
-    animation: fall 1100ms linear forwards;
-  }
-  @keyframes fall{
-    from{ transform: translateY(-30px) rotate(0deg); }
-    to{ transform: translateY(calc(100vh + 40px)) rotate(540deg); }
+    z-index: 60;
+    max-width: min(900px, calc(100vw - 24px));
   }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <div class="hero">
-      <div class="topRow">
-        <div class="brand">
-          <div class="mascot" aria-hidden="true">🕹️</div>
-          <div>
-            <h1>Email Quest Runner (Grade 1)</h1>
-            <p class="sub">Move → collect email pieces → build a kind & safe email!</p>
-          </div>
-        </div>
 
-        <div class="hudRow">
-          <div class="pill">🧩 Level: <span id="levelUI">1</span></div>
-          <div class="pill">❤️ <span class="hearts" id="heartsUI">♥♥♥</span></div>
-          <div class="pill">⭐ <span class="stars" id="starsUI">☆☆☆</span></div>
-          <div class="pill">🏆 Stickers: <span id="stickerUI">0</span>/6</div>
-        </div>
-      </div>
-
-      <div class="bar">
-        <div class="barTrack"><div class="barFill" id="barFill"></div></div>
-        <div class="barText">
-          <span id="goalText">Goal: Collect 4 correct pieces.</span>
-          <span id="tipText">Tip: Avoid “password/phone/address”!</span>
-        </div>
+  <div class="hud">
+    <div class="brand">
+      <div class="logo">🏃‍♂️</div>
+      <div>
+        <h1>Email Runner</h1>
+        <p class="sub">Collect 4 pieces → auto-check → next level</p>
       </div>
     </div>
 
-    <div class="controls">
+    <div class="pills">
+      <div class="pill">🧩 Level: <span id="levelUI">1</span></div>
+      <div class="pill">❤️ <span id="heartsUI">♥♥♥</span></div>
+      <div class="pill">⭐ <span id="starsUI">☆☆☆</span></div>
+      <div class="pill">🪙 <span id="coinsUI">0</span></div>
+
       <div class="nameBox">
         <label for="studentName">Student</label>
         <input id="studentName" type="text" placeholder="Type your name" maxlength="20" />
       </div>
-      <button class="btn btnSoft" id="howBtn">📘 How</button>
+
       <button class="btn btnWarn" id="resetBtn">🔁 Reset</button>
-      <button class="btn btnPrimary" id="nextBtn">➡️ Next Level</button>
+      <button class="btn" id="howBtn">📘 How</button>
     </div>
-  </header>
-
-  <div class="main">
-    <section class="panel">
-      <div class="panelHead">
-        <h2>🎮 Playground</h2>
-        <p class="help">Move: <b>Arrow Keys</b> or <b>WASD</b> • Collect bubbles • Avoid red!</p>
-      </div>
-
-      <div class="gameWrap">
-        <canvas id="game" width="900" height="520"></canvas>
-      </div>
-      <p class="mini" style="margin:10px 2px 0;">
-        Teacher mode idea: project this on screen, students take turns collecting the pieces.
-      </p>
-    </section>
-
-    <aside class="panel">
-      <div class="panelHead">
-        <h2>🎒 Backpack + Email</h2>
-        <p class="help">Collect all 4 to win ⭐⭐⭐</p>
-      </div>
-
-      <div class="backpack">
-        <div class="card">
-          <div class="cardTitle">✅ Collected Pieces <span class="mini" id="collectedCount">0/4</span></div>
-          <div class="slots">
-            <div class="slot empty" id="slotTo">To: (auto)</div>
-            <div class="slot empty" id="slotSubject">Subject: (none)</div>
-            <div class="slot empty" id="slotGreeting">Greeting: (none)</div>
-            <div class="slot empty" id="slotSentence">Sentence: (none)</div>
-            <div class="slot empty" id="slotClosing">Closing: (none)</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="cardTitle">📨 Email Preview <span class="mini">safe + kind</span></div>
-          <div class="previewBox" id="preview"></div>
-          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; justify-content:flex-end;">
-            <button class="btn" id="readBtn">🔊 Read</button>
-            <button class="btn btnPrimary" id="checkBtn">✅ Check</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="cardTitle">🏆 Stickers</div>
-          <div id="stickers" style="display:flex; gap:10px; flex-wrap:wrap;"></div>
-          <p class="mini" style="margin:8px 0 0;">Win ⭐⭐⭐ to unlock a sticker.</p>
-        </div>
-      </div>
-    </aside>
   </div>
+
+  <div class="layout">
+    <!-- 75% GAME -->
+    <div class="left">
+      <div class="sectionTitle">
+        <h2>🎮 Game Area</h2>
+        <p class="help">Move: Arrow keys / WASD • Avoid 👾 • Collect 🪙 + bubbles</p>
+      </div>
+      <div class="gameWrap">
+        <div class="pauseBadge" id="pauseBadge">⏸ Paused (popup open)</div>
+        <canvas id="game"></canvas>
+      </div>
+      <p class="help" id="goalText">Goal: Collect Subject, Greeting, Sentence, Closing.</p>
+    </div>
+
+    <!-- 25% MESSAGES -->
+    <div class="right">
+      <div class="card">
+        <div class="cardTitle">✅ Your Email Pieces <span class="mini" id="countUI">0/4</span></div>
+        <div class="slot" id="slotSubject">Subject: (none)</div>
+        <div class="slot" id="slotGreeting">Greeting: (none)</div>
+        <div class="slot" id="slotSentence">Sentence: (none)</div>
+        <div class="slot" id="slotClosing">Closing: (none)</div>
+      </div>
+
+      <div class="card">
+        <div class="cardTitle">📨 Preview <span class="mini">auto-check when complete</span></div>
+        <div class="preview" id="preview">Collect pieces to build your email!</div>
+        <div class="mini" style="margin-top:8px;">
+          Safe rule: no password, phone number, or home address.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="cardTitle">🛒 Mini Shop <span class="mini">easy mode</span></div>
+        <div class="mini">Buy with coins 🪙 (optional):</div>
+        <div style="display:grid; gap:8px; margin-top:8px;">
+          <button class="btn" id="buyShield">🛡️ Shield (free start) +10s — 8🪙</button>
+          <button class="btn" id="buySpeed">⚡ Speed +20s — 8🪙</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </div>
 
 <div class="toast" id="toast"></div>
 
-<!-- Modals -->
-<div class="overlay" id="overlayHow">
+<!-- How modal -->
+<div class="overlay" id="howOverlay">
   <div class="modal">
     <div class="modalTop">
-      <h3>📘 How to Play</h3>
+      <strong>📘 How to Play</strong>
       <button class="btn" id="closeHow">✖ Close</button>
     </div>
-    <ul style="margin:8px 0 0; font-weight:1000; color: var(--muted); line-height:1.6;">
-      <li>Move your character with <b>Arrow Keys</b> or <b>WASD</b>.</li>
-      <li>Collect <b>4 correct bubbles</b>: Subject, Greeting, Sentence, Closing.</li>
-      <li><b>Avoid unsafe bubbles</b> (password / phone / address). Those are red.</li>
-      <li>When you collect all 4, press <b>✅ Check</b> to earn stars and stickers.</li>
-    </ul>
-    <div class="safeBox">✅ Safe rule: Never share passwords, phone number, or home address in email.</div>
+    <div class="modalBody">
+      <ul style="margin:0; padding-left:18px;">
+        <li>Move with <b>Arrow Keys</b> or <b>WASD</b>.</li>
+        <li>Collect 4 blue bubbles: <b>Subject, Greeting, Sentence, Closing</b>.</li>
+        <li>Avoid red bubbles (unsafe / rude) and avoid enemies 👾.</li>
+        <li>When you collect all 4 pieces, the game will <b>auto-check</b> and show stars ⭐.</li>
+        <li>Tap <b>Next Level</b> in the popup.</li>
+      </ul>
+    </div>
+    <div class="actions">
+      <button class="btn btnPrimary" id="okHow">✅ Got it</button>
+    </div>
   </div>
 </div>
 
-<div class="overlay" id="overlayResult">
+<!-- Result modal -->
+<div class="overlay" id="resultOverlay">
   <div class="modal">
     <div class="modalTop">
-      <h3 id="resultTitle">Result</h3>
-      <button class="btn" id="closeResult">✖ Close</button>
+      <strong id="resultTitle">Result</strong>
+      <button class="btn" id="closeResult">✖</button>
     </div>
     <div class="bigStars" id="resultStars">⭐</div>
-    <div id="resultBody" style="font-weight:1000; color: var(--muted);"></div>
-    <div class="safeBox">✅ Email should be <b>kind</b> and <b>safe</b>.</div>
+    <div class="modalBody" id="resultBody"></div>
+    <div class="actions">
+      <button class="btn btnWarn" id="retryBtn">🔁 Retry</button>
+      <button class="btn btnPrimary" id="nextLevelBtn">➡️ Next Level</button>
+    </div>
   </div>
 </div>
 
-<div class="confetti" id="confetti"></div>
+
+<div class="overlay" id="certOverlay">
+  <div class="modal certModal">
+    <div class="modalTop">
+      <strong>🎓 Certificate of Completion</strong>
+      <button class="btn" id="closeCert">✖</button>
+    </div>
+
+    <div class="certPreview">
+      <img id="certImg" alt="Certificate preview" />
+      <div class="mini" style="margin-top:10px;">
+        ✅ Click save to download certificate.
+      </div>
+    </div>
+
+    <div class="actions certActions">
+      <button class="btn btnSoft" id="savePngCert">💾 Save</button>
+      <button class="btn btnPrimary" id="restartGame">🔁 Play Again</button>
+    </div>
+  </div>
+</div>
 
 <script>
+    
 (() => {
-  // ---------- Helpers ----------
   const $ = (id)=>document.getElementById(id);
   const clamp = (v,min,max)=>Math.max(min,Math.min(max,v));
   const rnd = (a,b)=>a+Math.random()*(b-a);
+
+  const MAX_LEVEL = 20;
 
   function showToast(msg){
     const t = $("toast");
     t.textContent = msg;
     t.style.display = "block";
     clearTimeout(showToast._t);
-    showToast._t = setTimeout(()=>t.style.display="none", 1400);
+    showToast._t = setTimeout(()=>t.style.display="none", 1200);
   }
 
-  function beep(freq=700, ms=70){
+  function beep(freq=700, ms=60){
     try{
       const ctx = beep._ctx || (beep._ctx = new (window.AudioContext||window.webkitAudioContext)());
       const o = ctx.createOscillator();
@@ -474,432 +442,804 @@
     }catch{}
   }
 
-  function popConfetti(){
-    const confetti = $("confetti");
-    confetti.innerHTML = "";
-    confetti.style.display = "block";
-    const colors = [
-      "rgba(108,99,255,.9)","rgba(0,194,255,.9)","rgba(34,197,94,.9)",
-      "rgba(245,158,11,.9)","rgba(255,99,132,.85)"
-    ];
-    for(let i=0;i<70;i++){
-      const el=document.createElement("i");
-      el.style.left=(Math.random()*100)+"vw";
-      el.style.top=(-20-Math.random()*120)+"px";
-      el.style.background=colors[Math.floor(Math.random()*colors.length)];
-      el.style.transform=`rotate(${Math.random()*360}deg)`;
-      el.style.animationDuration=(900+Math.random()*700)+"ms";
-      confetti.appendChild(el);
-    }
-    setTimeout(()=>confetti.style.display="none", 1300);
-  }
-
-  function speak(text){
-    if(!("speechSynthesis" in window)){ showToast("Read aloud not supported."); return; }
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.rate = 0.95;
-    window.speechSynthesis.speak(u);
-  }
-
-  // ---------- Stickers ----------
-  const STICKERS = ["🦄","🐯","🚀","🧁","🌈","🏆"];
-  const STICKER_KEY = "email_runner_stickers_v1";
-  function loadStickers(){
-    try{
-      const raw = localStorage.getItem(STICKER_KEY);
-      const arr = raw ? JSON.parse(raw) : [];
-      return Array.isArray(arr) ? arr : [];
-    }catch{ return []; }
-  }
-  function saveStickers(arr){ localStorage.setItem(STICKER_KEY, JSON.stringify(arr)); }
-  let unlocked = loadStickers();
-
-  function renderStickers(){
-    const box = $("stickers");
-    box.innerHTML = "";
-    STICKERS.forEach((s,i)=>{
-      const d = document.createElement("div");
-      d.textContent = s;
-      d.style.width="44px";
-      d.style.height="44px";
-      d.style.display="grid";
-      d.style.placeItems="center";
-      d.style.borderRadius="16px";
-      d.style.border="2px solid rgba(31,42,55,.10)";
-      d.style.background="rgba(255,255,255,.9)";
-      d.style.boxShadow="0 10px 18px rgba(0,0,0,.10)";
-      d.style.fontSize="26px";
-      d.style.opacity = unlocked.includes(i) ? "1" : ".3";
-      box.appendChild(d);
-    });
-    $("stickerUI").textContent = unlocked.length;
-  }
-  function unlockSticker(){
-    for(let i=0;i<STICKERS.length;i++){
-      if(!unlocked.includes(i)){
-        unlocked.push(i);
-        saveStickers(unlocked);
-        renderStickers();
-        return STICKERS[i];
-      }
-    }
-    return null;
-  }
-
-  // ---------- Level Content ----------
-  // Each level has *different* correct options.
+  // LEVEL DATA (each level different, but still simple for Grade 1)
   const LEVELS = [
     {
       name:"Say Hello",
-      goal:"Collect Subject + Greeting + Sentence + Closing.",
-      tip:"Start friendly: Hello!",
-      subject: ["Hello Teacher", "Hello!"],
-      greeting: ["Hello Teacher,", "Hi Teacher,"],
-      sentence: ["My name is ____.", "I am in Grade 1."],
-      closing: ["Thank you.", "From, ____"],
+      goal:"Collect: Subject + Greeting + Sentence + Closing",
+      subject:["Hello Teacher","Hello!"],
+      greeting:["Hello Teacher,","Hi Teacher,"],
+      sentence:["My name is ____.","I am in Grade 1."],
+      closing:["Thank you.","From, ____"],
     },
     {
       name:"What I Learned",
-      goal:"Collect learning email pieces.",
-      tip:"One short sentence is perfect!",
-      subject: ["Today I learned", "My ICT learning"],
-      greeting: ["Dear Teacher,", "Hello Teacher,"],
-      sentence: ["Today I learned how to type.", "Today I learned how to save."],
-      closing: ["Thank you.", "Have a nice day!"],
+      goal:"Tell one thing you learned",
+      subject:["Today I learned","My ICT learning"],
+      greeting:["Dear Teacher,","Hello Teacher,"],
+      sentence:["Today I learned how to type.","Today I learned how to save."],
+      closing:["Thank you.","Have a nice day!"],
     },
     {
-      name:"Ask a Kind Question",
-      goal:"Collect question email pieces.",
-      tip:"Ask politely: please!",
-      subject: ["A question", "Question for you"],
-      greeting: ["Hello Teacher,", "Dear Teacher,"],
-      sentence: ["Can you help me, please?", "How do I open my file?"],
-      closing: ["Thank you.", "From, ____"],
+      name:"Kind Question",
+      goal:"Ask politely",
+      subject:["A question","Question for you"],
+      greeting:["Hello Teacher,","Dear Teacher,"],
+      sentence:["Can you help me, please?","How do I open my file?"],
+      closing:["Thank you.","From, ____"],
     },
     {
-      name:"Be a Kind Classmate",
-      goal:"Collect kind message pieces.",
-      tip:"Kind words are powerful!",
-      subject: ["Kind message", "Hello friend"],
-      greeting: ["Hello,", "Hi there,"],
-      sentence: ["Great job today!", "I like your drawing."],
-      closing: ["From, ____", "Thank you."],
+      name:"Kind Message",
+      goal:"Say something nice",
+      subject:["Kind message","Hello friend"],
+      greeting:["Hello,","Hi there,"],
+      sentence:["Great job today!","I like your drawing."],
+      closing:["From, ____","Thank you."],
     }
   ];
 
-  // “Bad/unsafe” pieces appear in the map (avoid).
   const BAD_PIECES = [
-    {type:"Sentence", text:"My password is 1234.", reason:"password"},
-    {type:"Sentence", text:"Call me at 09____.", reason:"phone"},
-    {type:"Sentence", text:"My home is at ____ street.", reason:"address"},
-    {type:"Subject", text:"FREE MONEY!!!", reason:"spam"},
-    {type:"Greeting", text:"HEY!!!", reason:"rude"},
-    {type:"Closing", text:"DO IT NOW!", reason:"rude"},
+    {type:"Sentence", text:"My password is 1234."},
+    {type:"Sentence", text:"Call me at 09____."},
+    {type:"Sentence", text:"My home is at ____ street."},
+    {type:"Subject", text:"FREE MONEY!!!"},
+    {type:"Greeting", text:"HEY!!!"},
+    {type:"Closing", text:"DO IT NOW!"},
   ];
 
-  // ---------- Game State ----------
-  let level = 1;
-  let hearts = 3;
-  let stars = 0;
+  // ===== INPUT + PAUSE HELPERS =====
+  const keys = new Set();
 
-  const collected = {
-    To: null,
-    Subject: null,
-    Greeting: null,
-    Sentence: null,
-    Closing: null
+  function isTypingTarget(el){
+    if(!el) return false;
+    const tag = (el.tagName || "").toLowerCase();
+    return tag === "input" || tag === "textarea" || el.isContentEditable;
+  }
+
+  function anyPopupOpen(){
+    const ids = ["howOverlay", "resultOverlay", "certOverlay"];
+    return ids.some(id => {
+      const el = $(id);
+      return el && el.style.display === "flex";
+    });
+  }
+
+  function clearMovementKeys(){ keys.clear(); }
+
+  // STATE
+  const state = {
+    level: 1,
+    hearts: 3,
+    stars: 0,
+    coins: 0,
+    // easy-mode powers
+    shield: 10,        // free at start
+    speed: 0,
+    hurtCD: 0,         // longer invincibility
+    collected: { Subject:null, Greeting:null, Sentence:null, Closing:null },
+    checking: false,   // prevents multiple popups
+    paused: false
   };
 
-  function setStars(n){
-    stars = clamp(n,0,3);
-    $("starsUI").textContent = "★".repeat(stars) + "☆".repeat(3-stars);
-    $("barFill").style.width = (stars/3*100) + "%";
-  }
-  function setHearts(n){
-    hearts = clamp(n,0,3);
-    $("heartsUI").textContent = "♥".repeat(hearts) + "♡".repeat(3-hearts);
+  function setPaused(on){
+    state.paused = !!on;
+    if(state.paused) clearMovementKeys();
+    $("pauseBadge").style.display = state.paused ? "block" : "none";
   }
 
-  function currentLevel(){
-    return LEVELS[(level-1) % LEVELS.length];
-  }
+  function refreshPause(){ setPaused(anyPopupOpen()); }
 
-  function resetCollected(){
-    collected.To = "Teacher (auto)";
-    collected.Subject = null;
-    collected.Greeting = null;
-    collected.Sentence = null;
-    collected.Closing = null;
-    updateSlots();
-  }
+  // Keyboard listeners (FIX: allow typing WASD in inputs)
+  window.addEventListener("keydown",(e)=>{
+    if(isTypingTarget(document.activeElement)) return;
 
-  function updateSlots(){
-    const slot = (id, label, val)=>{
-      const el = $(id);
-      if(val){
-        el.classList.remove("empty");
-        el.textContent = `${label}: ${val}`;
-      }else{
-        el.classList.add("empty");
-        el.textContent = `${label}: (none)`;
-      }
-    };
-    $("slotTo").classList.remove("empty");
-    $("slotTo").textContent = `To: ${collected.To || "Teacher (auto)"}`;
-    slot("slotSubject","Subject",collected.Subject);
-    slot("slotGreeting","Greeting",collected.Greeting);
-    slot("slotSentence","Sentence",collected.Sentence);
-    slot("slotClosing","Closing",collected.Closing);
-
-    const have = ["Subject","Greeting","Sentence","Closing"].filter(k=>!!collected[k]).length;
-    $("collectedCount").textContent = `${have}/4`;
-
-    const name = ($("studentName").value || "").trim();
-    const rep = (t)=> (t||"").replaceAll("____", name || "____");
-    const preview = [
-      `To: Teacher`,
-      `Subject: ${rep(collected.Subject||"")}`,
-      "",
-      rep(collected.Greeting||""),
-      rep(collected.Sentence||""),
-      rep(collected.Closing||"")
-    ].filter(x=>x!=="" || x==="").join("\n");
-    $("preview").textContent = preview.trim() ? preview : "Collect pieces to build your email!";
-  }
-
-  function setHeaderGoal(){
-    const L = currentLevel();
-    $("levelUI").textContent = level;
-    $("goalText").textContent = `Goal: ${L.name} — ${L.goal}`;
-    $("tipText").textContent = `Tip: ${L.tip}`;
-  }
-
-  // ---------- Canvas Game ----------
-  const canvas = $("game");
-  const ctx = canvas.getContext("2d");
-
-  // Make canvas crisp on HiDPI
-  function resizeCanvas(){
-    const cssW = canvas.clientWidth;
-    const cssH = Math.round(cssW * (520/900)); // keep aspect ratio
-    canvas.style.height = cssH + "px";
-    const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-    canvas.width = Math.round(cssW * dpr);
-    canvas.height = Math.round(cssH * dpr);
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-  }
-
-  const keys = new Set();
-  window.addEventListener("keydown", (e)=>{
     const k = e.key.toLowerCase();
     if(["arrowup","arrowdown","arrowleft","arrowright","w","a","s","d"].includes(k)){
       keys.add(k);
       e.preventDefault();
     }
   }, {passive:false});
-  window.addEventListener("keyup", (e)=>{
+
+  window.addEventListener("keyup",(e)=>{
+    if(isTypingTarget(document.activeElement)) return;
     keys.delete(e.key.toLowerCase());
   });
 
-  const world = {
-    w: 900, h: 520,
-    // cute obstacles
-    blocks: []
-  };
+  function currentLevel(){ return LEVELS[(state.level-1) % LEVELS.length]; }
 
-  function makeBlocks(){
-    world.blocks = [
-      {x: 160, y: 120, w: 120, h: 40},
-      {x: 420, y: 90,  w: 160, h: 44},
-      {x: 620, y: 180, w: 110, h: 40},
-      {x: 270, y: 300, w: 160, h: 44},
-      {x: 540, y: 320, w: 190, h: 44},
-    ];
+  function setHearts(n){
+    state.hearts = clamp(n,0,3);
+    $("heartsUI").textContent = "♥".repeat(state.hearts) + "♡".repeat(3-state.hearts);
+  }
+  function setStars(n){
+    state.stars = clamp(n,0,3);
+    $("starsUI").textContent = "★".repeat(state.stars) + "☆".repeat(3-state.stars);
+  }
+  function setCoins(n){
+    state.coins = Math.max(0, Math.floor(n));
+    $("coinsUI").textContent = state.coins;
   }
 
-  const player = {
-    x: 90, y: 90,
-    r: 18,
-    vx: 0, vy: 0,
-    speed: 220,
-    face: "🙂"
-  };
-
-  function rectHitCircle(rect, cx, cy, r){
-    const closestX = clamp(cx, rect.x, rect.x + rect.w);
-    const closestY = clamp(cy, rect.y, rect.y + rect.h);
-    const dx = cx - closestX;
-    const dy = cy - closestY;
-    return (dx*dx + dy*dy) <= r*r;
+  function resetCollected(){
+    state.collected.Subject = null;
+    state.collected.Greeting = null;
+    state.collected.Sentence = null;
+    state.collected.Closing = null;
+    state.checking = false;
+    updateRightPanel();
   }
 
-  function pushOut(rect, p){
-    // Simple push-out by checking which side is closest
-    const cx = p.x, cy = p.y, r = p.r;
-    const left = Math.abs((rect.x) - (cx + r));
-    const right = Math.abs((rect.x + rect.w) - (cx - r));
-    const top = Math.abs((rect.y) - (cy + r));
-    const bottom = Math.abs((rect.y + rect.h) - (cy - r));
-    const min = Math.min(left,right,top,bottom);
-    if(min === left) p.x = rect.x - r;
-    else if(min === right) p.x = rect.x + rect.w + r;
-    else if(min === top) p.y = rect.y - r;
-    else p.y = rect.y + rect.h + r;
-  }
-
-  // Collectibles
-  let bubbles = [];
-
-  function makeBubble(type, text, good=true){
-    return {
-      type, text, good,
-      x: rnd(60, world.w-60),
-      y: rnd(60, world.h-60),
-      r: good ? 22 : 24,
-      bob: rnd(0, Math.PI*2),
+  function updateRightPanel(){
+    const slot = (id, label, val)=>{
+      const el = $(id);
+      el.textContent = `${label}: ${val || "(none)"}`;
+      el.classList.toggle("empty", !val);
     };
-  }
 
-  function spawnBubbles(){
-    const L = currentLevel();
-    bubbles = [];
-    // correct set: 1 each
-    bubbles.push(makeBubble("Subject", L.subject[Math.floor(Math.random()*L.subject.length)], true));
-    bubbles.push(makeBubble("Greeting", L.greeting[Math.floor(Math.random()*L.greeting.length)], true));
-    bubbles.push(makeBubble("Sentence", L.sentence[Math.floor(Math.random()*L.sentence.length)], true));
-    bubbles.push(makeBubble("Closing", L.closing[Math.floor(Math.random()*L.closing.length)], true));
+    slot("slotSubject","Subject",state.collected.Subject);
+    slot("slotGreeting","Greeting",state.collected.Greeting);
+    slot("slotSentence","Sentence",state.collected.Sentence);
+    slot("slotClosing","Closing",state.collected.Closing);
 
-    // add extras (good distractors)
-    const goodExtras = [
-      makeBubble("Subject","My message", true),
-      makeBubble("Greeting","Hello!", true),
-      makeBubble("Closing","Bye.", true),
-      makeBubble("Sentence","I like ICT.", true),
-    ];
-    // add bad/unsafe
-    const badExtras = BAD_PIECES.map(p => makeBubble(p.type, p.text, false));
+    const have = ["Subject","Greeting","Sentence","Closing"].filter(k=>!!state.collected[k]).length;
+    $("countUI").textContent = `${have}/4`;
 
-    // choose some extras
-    const pick = (arr,n)=>{
-      const a = arr.slice().sort(()=>Math.random()-0.5);
-      return a.slice(0,n);
-    };
-    bubbles.push(...pick(goodExtras, 3));
-    bubbles.push(...pick(badExtras, 4));
+    const name = ($("studentName").value || "").trim();
+    const rep = (t)=> (t||"").replaceAll("____", name || "____");
 
-    // keep bubbles out of blocks
-    for(const b of bubbles){
-      for(const bl of world.blocks){
-        if(rectHitCircle(bl, b.x, b.y, b.r)){
-          b.x = rnd(60, world.w-60);
-          b.y = rnd(60, world.h-60);
-        }
-      }
-    }
-  }
+    const preview =
+`To: Teacher
+Subject: ${rep(state.collected.Subject||"")}
 
-  function hasCollected(type){
-    return !!collected[type];
-  }
+${rep(state.collected.Greeting||"")}
+${rep(state.collected.Sentence||"")}
+${rep(state.collected.Closing||"")}`.trim();
 
-  function collectBubble(b){
-    if(!b.good){
-      // bad/unsafe
-      setHearts(hearts - 1);
-      beep(200, 140);
-      showToast("🚫 Unsafe bubble! Avoid passwords/phone/address.");
-      if(hearts <= 0){
-        openResult("Oops! 💔", 1, "You lost all hearts. Click Reset and try again.");
-      }
-      return;
-    }
+    $("preview").textContent = have ? preview : "Collect pieces to build your email!";
 
-    // good bubble
-    if(hasCollected(b.type)){
-      beep(520, 70);
-      showToast("✅ You already have that piece!");
-      return;
-    }
-
-    collected[b.type] = b.text;
-    updateSlots();
-    beep(860, 70);
-    showToast(`🎉 Collected: ${b.type}!`);
-
-    // star progress based on how many of 4 collected
-    const have = ["Subject","Greeting","Sentence","Closing"].filter(k=>!!collected[k]).length;
-    // (0..4) map to stars roughly
-    setStars(have >= 4 ? 3 : (have >= 3 ? 2 : (have >= 1 ? 1 : 0)));
-
-    // win condition: all 4 collected
-    if(have === 4){
-      beep(980, 80); setTimeout(()=>beep(1120,80), 90);
-      showToast("🏁 All pieces collected! Press ✅ Check!");
+    // AUTO CHECK when complete
+    if(have === 4 && !state.checking){
+      state.checking = true;
+      setTimeout(()=>autoCheckAndPopup(), 350);
     }
   }
 
   function isUnsafeText(text){
     const t = (text||"").toLowerCase();
-    const bad = ["password","phone","call me","address","street","credit card"];
+    const bad = ["password","phone","call me","address","street","credit card","free money"];
     return bad.some(w => t.includes(w));
   }
 
-  // ---------- Drawing ----------
-  function drawBackground(){
-    // grass-like tiles
-    const w = world.w, h = world.h;
-    ctx.save();
-    ctx.fillStyle = "rgba(255,255,255,.0)";
-    ctx.clearRect(0,0,w,h);
+  function autoCheckAndPopup(){
+    const L = currentLevel();
+    const combined = [state.collected.Subject, state.collected.Greeting, state.collected.Sentence, state.collected.Closing].join(" ");
 
-    // soft playfield
-    const grad = ctx.createLinearGradient(0,0,w,h);
-    grad.addColorStop(0, "rgba(108,99,255,.08)");
-    grad.addColorStop(1, "rgba(0,194,255,.08)");
-    ctx.fillStyle = grad;
-    ctx.fillRect(0,0,w,h);
+    let stars = 2; // base
+    if(isUnsafeText(combined)) stars = 1;
 
-    // cute dots
-    for(let i=0;i<140;i++){
-      const x = (i*73) % w;
-      const y = ((i*129) % h);
-      ctx.fillStyle = i%3===0 ? "rgba(108,99,255,.10)" : (i%3===1 ? "rgba(0,194,255,.10)" : "rgba(34,197,94,.10)");
-      ctx.beginPath();
-      ctx.arc(x, y, 4, 0, Math.PI*2);
-      ctx.fill();
-    }
+    const perfect =
+      L.subject.includes(state.collected.Subject) &&
+      L.greeting.includes(state.collected.Greeting) &&
+      L.sentence.includes(state.collected.Sentence) &&
+      L.closing.includes(state.collected.Closing);
 
-    // border
-    ctx.strokeStyle = "rgba(31,42,55,.12)";
-    ctx.lineWidth = 4;
-    ctx.strokeRect(2,2,w-4,h-4);
-    ctx.restore();
+    if(perfect && !isUnsafeText(combined)) stars = 3;
+
+    // small penalty if they got hit a lot
+    if(state.hearts <= 1 && stars > 1) stars -= 1;
+
+    setStars(stars);
+
+    $("resultTitle").textContent = stars === 3 ? "Perfect! 🎉" : (stars === 2 ? "Nice! ⭐⭐" : "Try Again 🙂");
+    $("resultStars").textContent = "⭐".repeat(stars);
+
+    const name = ($("studentName").value || "").trim();
+    const rep = (t)=> (t||"").replaceAll("____", name || "____");
+    const preview =
+`To: Teacher
+Subject: ${rep(state.collected.Subject)}
+
+${rep(state.collected.Greeting)}
+${rep(state.collected.Sentence)}
+${rep(state.collected.Closing)}`;
+
+    const reward = stars === 3 ? 8 : (stars === 2 ? 5 : 2);
+    setCoins(state.coins + reward);
+
+    $("resultBody").innerHTML = `
+      <div style="white-space:pre-wrap; background:#fff; border:2px solid rgba(31,42,55,.10); border-radius:14px; padding:10px; margin-top:8px;">${preview}</div>
+      <div style="margin-top:10px;">
+        🪙 Reward: <b>+${reward}</b> coins
+        <br/>Tip: Collect the best pieces for this level to get ⭐⭐⭐
+      </div>
+    `;
+
+    // Next button label becomes certificate at level 20
+    $("nextLevelBtn").textContent = (state.level >= MAX_LEVEL) ? "🎓 Get Certificate" : "➡️ Next Level";
+
+    $("resultOverlay").style.display = "flex";
+    refreshPause();
+
+    beep(960,80);
+    setTimeout(()=>beep(1120,80), 90);
   }
 
-  function drawBlocks(){
-    ctx.save();
+ function showCertificate(){
+  const student = ($("studentName").value || "").trim() || "____________";
+  const teacher = "Jaspel Bosales";
+  const d = new Date();
+  const dateStr = d.toLocaleDateString(undefined, { year:"numeric", month:"long", day:"numeric" });
+
+  // Create A4 PNG and show preview
+  const dataUrl = makeCertificatePNG({
+    student,
+    teacher,
+    dateStr,
+    levels: MAX_LEVEL
+  });
+
+  $("certImg").src = dataUrl;
+
+  $("certOverlay").style.display = "flex";
+  refreshPause();
+
+  beep(960,80);
+  setTimeout(()=>beep(1120,80), 90);
+}
+
+/* ✅ A4 PNG generator (Canvas) */
+function makeCertificatePNG({ student, teacher, dateStr, levels }){
+  // A4 @ 300dpi (great for printing)
+  const W = 2480, H = 3508;
+
+  const c = document.createElement("canvas");
+  c.width = W; c.height = H;
+  const g = c.getContext("2d");
+
+  // Helpers
+  const rrect = (x,y,w,h,r)=>{
+    r = Math.min(r, w/2, h/2);
+    g.beginPath();
+    g.moveTo(x+r,y);
+    g.arcTo(x+w,y,x+w,y+h,r);
+    g.arcTo(x+w,y+h,x,y+h,r);
+    g.arcTo(x,y+h,x,y,r);
+    g.arcTo(x,y,x+w,y,r);
+    g.closePath();
+  };
+  const shadow = (blur, alpha)=>{
+    g.shadowColor = `rgba(0,0,0,${alpha})`;
+    g.shadowBlur = blur;
+    g.shadowOffsetX = 0;
+    g.shadowOffsetY = Math.round(blur*0.6);
+  };
+  const noShadow = ()=>{ g.shadowColor="transparent"; g.shadowBlur=0; g.shadowOffsetX=0; g.shadowOffsetY=0; };
+
+  // Background
+  g.fillStyle = "#ffffff";
+  g.fillRect(0,0,W,H);
+
+  // Soft gradients
+  const grad1 = g.createRadialGradient(W*0.2,H*0.18,10, W*0.2,H*0.18, W*0.9);
+  grad1.addColorStop(0,"rgba(255,241,248,0.95)");
+  grad1.addColorStop(1,"rgba(255,241,248,0)");
+  g.fillStyle = grad1; g.fillRect(0,0,W,H);
+
+  const grad2 = g.createRadialGradient(W*0.82,H*0.28,10, W*0.82,H*0.28, W*0.9);
+  grad2.addColorStop(0,"rgba(233,251,255,0.95)");
+  grad2.addColorStop(1,"rgba(233,251,255,0)");
+  g.fillStyle = grad2; g.fillRect(0,0,W,H);
+
+  // Confetti dots
+  const dots = [
+    ["rgba(108,99,255,.55)", 0.10, 0.12],
+    ["rgba(0,194,255,.55)",  0.28, 0.08],
+    ["rgba(245,158,11,.55)", 0.62, 0.11],
+    ["rgba(34,197,94,.55)",  0.86, 0.15],
+    ["rgba(245,158,11,.45)", 0.14, 0.76],
+    ["rgba(108,99,255,.45)", 0.82, 0.86]
+  ];
+  for(let i=0;i<140;i++){
+    const pick = dots[i % dots.length];
+    g.fillStyle = pick[0];
+    const x = (Math.random()*W);
+    const y = (Math.random()*H);
+    const r = 6 + Math.random()*8;
+    g.beginPath(); g.arc(x,y,r,0,Math.PI*2); g.fill();
+  }
+
+  // Outer border
+  noShadow();
+  g.lineWidth = 18;
+  g.strokeStyle = "rgba(108,99,255,.30)";
+  rrect(70,70,W-140,H-140,60);
+  g.stroke();
+
+  // Header card
+  shadow(22,0.14);
+  g.fillStyle = "rgba(255,255,255,0.92)";
+  g.strokeStyle = "rgba(31,42,55,.10)";
+  g.lineWidth = 10;
+  rrect(160,160,W-320,240,60);
+  g.fill(); g.stroke();
+  noShadow();
+
+  // Logo box
+  shadow(16,0.12);
+  const logoX=210, logoY=200, logoS=150;
+  const lg = g.createLinearGradient(logoX,logoY,logoX+logoS,logoY+logoS);
+  lg.addColorStop(0,"rgba(108,99,255,.18)");
+  lg.addColorStop(1,"rgba(0,194,255,.18)");
+  g.fillStyle=lg;
+  g.strokeStyle="rgba(108,99,255,.22)";
+  g.lineWidth=10;
+  rrect(logoX,logoY,logoS,logoS,50);
+  g.fill(); g.stroke();
+  noShadow();
+
+  // Emoji runner
+  g.font = "120px ui-rounded, system-ui, Arial";
+  g.fillStyle = "rgba(31,42,55,.90)";
+  g.fillText("🏃‍♂️", logoX+30, logoY+118);
+
+  // Title
+  g.font = "900 88px ui-rounded, system-ui, Arial";
+  g.fillText("Email Runner", 400, 270);
+
+  g.font = "900 44px ui-rounded, system-ui, Arial";
+  g.fillStyle = "rgba(31,42,55,.65)";
+  g.fillText("Certificate of Completion", 400, 330);
+
+  // Right stars
+  g.textAlign="right";
+  g.font = "900 52px ui-rounded, system-ui, Arial";
+  g.fillStyle = "rgba(31,42,55,.65)";
+  g.fillText("⭐ ⭐ ⭐", W-210, 260);
+  g.font = "900 36px ui-rounded, system-ui, Arial";
+  g.fillText(`Levels 1–${levels}`, W-210, 315);
+  g.textAlign="left";
+
+  // Main text
+  g.fillStyle = "rgba(31,42,55,.72)";
+  g.font = "900 60px ui-rounded, system-ui, Arial";
+  g.textAlign="center";
+  g.fillText("This certificate is proudly presented to", W/2, 620);
+
+  // Name badge
+  shadow(18,0.10);
+  g.fillStyle = "rgba(255,255,255,0.94)";
+  g.strokeStyle = "rgba(108,99,255,.35)";
+  g.setLineDash([22,18]);
+  g.lineWidth = 10;
+  rrect(340, 720, W-680, 190, 60);
+  g.fill(); g.stroke();
+  g.setLineDash([]);
+  noShadow();
+
+  g.fillStyle = "rgba(31,42,55,.92)";
+  g.font = "900 140px ui-rounded, system-ui, Arial";
+  g.fillText(student, W/2, 855);
+
+  // Completion line
+  g.fillStyle = "rgba(31,42,55,.75)";
+  g.font = "900 56px ui-rounded, system-ui, Arial";
+  g.fillText(`for successfully completing all ${levels} levels of Email Runner.`, W/2, 1020);
+
+  // Skills line
+  g.fillStyle = "rgba(31,42,55,.65)";
+  g.font = "900 46px ui-rounded, system-ui, Arial";
+  g.fillText("You learned: Subject • Greeting • Sentence • Closing", W/2, 1120);
+  g.fillText("Keep being kind online! 🌈", W/2, 1185);
+
+  // Big badge circle
+  shadow(26,0.14);
+  const cx=W/2, cy=1600, cr=300;
+  const bg3 = g.createLinearGradient(cx-cr,cy-cr,cx+cr,cy+cr);
+  bg3.addColorStop(0,"rgba(108,99,255,.18)");
+  bg3.addColorStop(1,"rgba(0,194,255,.18)");
+  g.fillStyle = bg3;
+  g.strokeStyle = "rgba(108,99,255,.28)";
+  g.lineWidth = 14;
+  g.beginPath(); g.arc(cx,cy,cr,0,Math.PI*2); g.fill(); g.stroke();
+  noShadow();
+
+  g.font = "260px ui-rounded, system-ui, Arial";
+  g.fillStyle = "rgba(31,42,55,.90)";
+  g.fillText("🏅", cx, cy+90);
+
+  // Bottom cards (Date / Teacher)
+  const cardW = (W-160*2-40)/2;
+  const cardH = 210;
+  const by = H-420;
+
+  shadow(18,0.10);
+  g.fillStyle = "rgba(255,255,255,0.92)";
+  g.strokeStyle = "rgba(31,42,55,.10)";
+  g.lineWidth = 10;
+
+  // Date card
+  rrect(160, by, cardW, cardH, 60);
+  g.fill(); g.stroke();
+
+  // Teacher card
+  rrect(160+cardW+40, by, cardW, cardH, 60);
+  g.fill(); g.stroke();
+  noShadow();
+
+  // Date text
+  g.textAlign="left";
+  g.fillStyle="rgba(31,42,55,.70)";
+  g.font="900 36px ui-rounded, system-ui, Arial";
+  g.fillText("Date", 220, by+70);
+  g.font="900 54px ui-rounded, system-ui, Arial";
+  g.fillStyle="rgba(31,42,55,.85)";
+  g.fillText(dateStr, 220, by+145);
+
+  // Teacher text
+  g.textAlign="right";
+  g.fillStyle="rgba(31,42,55,.70)";
+  g.font="900 36px ui-rounded, system-ui, Arial";
+  g.fillText("Teacher", W-220, by+70);
+  g.font="900 54px ui-rounded, system-ui, Arial";
+  g.fillStyle="rgba(31,42,55,.85)";
+  g.fillText(teacher, W-220, by+145);
+
+  g.textAlign="left";
+
+  return c.toDataURL("image/png");
+}
+
+/* ✅ Download the PNG */
+function downloadCertPNG(){
+  const student = ($("studentName").value || "").trim() || "Student";
+  const teacher = "Jaspel Bosales";
+  const d = new Date();
+  const dateStr = d.toLocaleDateString(undefined, { year:"numeric", month:"long", day:"numeric" });
+
+  const dataUrl = makeCertificatePNG({
+    student,
+    teacher,
+    dateStr,
+    levels: MAX_LEVEL
+  });
+
+  const a = document.createElement("a");
+  const safeName = student.replace(/[^a-z0-9\-_ ]/gi,"").trim().replace(/\s+/g,"-") || "Student";
+  a.href = dataUrl;
+  a.download = `EmailRunner-Certificate-${safeName}.png`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+
+
+  function goNextLevel(){
+    // stop at max level and award certificate
+    if(state.level >= MAX_LEVEL){
+      $("resultOverlay").style.display = "none";
+      refreshPause();
+      showCertificate();
+      return;
+    }
+
+    state.level++;
+    $("levelUI").textContent = state.level;
+    const L = currentLevel();
+    $("goalText").textContent = `Goal: ${L.name} — ${L.goal}`;
+
+    // easy start each level
+    state.shield = 10;
+    state.speed = 0;
+    state.hurtCD = 0;
+    setHearts(3);
+    resetCollected();
+    spawnAll();
+
+    $("resultOverlay").style.display = "none";
+    refreshPause();
+    showToast("➡️ Next Level!");
+  }
+
+  function retryLevel(){
+    state.shield = 10;
+    state.speed = 0;
+    state.hurtCD = 0;
+    setHearts(3);
+    resetCollected();
+    spawnAll();
+
+    $("resultOverlay").style.display = "none";
+    refreshPause();
+    showToast("🔁 Try again!");
+  }
+
+  // SHOP (simple)
+  $("buyShield").addEventListener("click", ()=>{
+    if(state.coins < 8) return showToast("Need more coins 🪙");
+    setCoins(state.coins - 8);
+    state.shield += 10;
+    showToast("🛡️ Shield +10s!");
+    beep(880,70);
+  });
+  $("buySpeed").addEventListener("click", ()=>{
+    if(state.coins < 8) return showToast("Need more coins 🪙");
+    setCoins(state.coins - 8);
+    state.speed += 20;
+    showToast("⚡ Speed +20s!");
+    beep(880,70);
+  });
+
+  // ===== Canvas / Game =====
+  const canvas = $("game");
+  const ctx = canvas.getContext("2d");
+
+  // World in “world units”
+  const world = { w: 1100, h: 680, blocks: [] };
+
+  function resizeCanvas(){
+    const rect = canvas.getBoundingClientRect();
+    const cssW = Math.max(300, rect.width);
+    const cssH = Math.max(220, rect.height);
+    const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    canvas.width = Math.round(cssW * dpr);
+    canvas.height = Math.round(cssH * dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+
+  function makeBlocks(){
+    // fewer blocks = easier navigation
+    world.blocks = [
+      {x: 230, y: 150, w: 150, h: 50},
+      {x: 700, y: 170, w: 160, h: 50},
+      {x: 440, y: 420, w: 210, h: 55},
+    ];
+  }
+
+  const player = { x: 120, y: 120, r: 20, speed: 280, face:"🙂" };
+  let bubbles = [];
+  let coins = [];
+  let enemies = [];
+
+  // SAFE ZONE (enemies avoid center)
+  const safeZone = { x: world.w/2 - 160, y: world.h/2 - 120, w: 320, h: 240 };
+
+  function rectHitCircle(rect, cx, cy, r){
+    const closestX = clamp(cx, rect.x, rect.x + rect.w);
+    const closestY = clamp(cy, rect.y, rect.y + rect.h);
+    const dx = cx - closestX, dy = cy - closestY;
+    return (dx*dx + dy*dy) <= r*r;
+  }
+  function pushOut(rect, obj){
+    const cx=obj.x, cy=obj.y, r=obj.r;
+    const left = Math.abs((rect.x) - (cx + r));
+    const right = Math.abs((rect.x + rect.w) - (cx - r));
+    const top = Math.abs((rect.y) - (cy + r));
+    const bottom = Math.abs((rect.y + rect.h) - (cy - r));
+    const min = Math.min(left,right,top,bottom);
+    if(min === left) obj.x = rect.x - r;
+    else if(min === right) obj.x = rect.x + rect.w + r;
+    else if(min === top) obj.y = rect.y - r;
+    else obj.y = rect.y + rect.h + r;
+  }
+
+  function keepOutOfBlocks(obj){
     for(const b of world.blocks){
-      // shadow
-      ctx.fillStyle = "rgba(0,0,0,.10)";
-      ctx.fillRect(b.x+6, b.y+6, b.w, b.h);
-
-      // block
-      ctx.fillStyle = "rgba(255,255,255,.92)";
-      ctx.strokeStyle = "rgba(108,99,255,.18)";
-      ctx.lineWidth = 3;
-      roundRect(ctx, b.x, b.y, b.w, b.h, 16);
-      ctx.fill();
-      ctx.stroke();
-
-      // label
-      ctx.fillStyle = "rgba(31,42,55,.55)";
-      ctx.font = "900 12px ui-rounded, system-ui";
-      ctx.fillText("📚", b.x + 10, b.y + 26);
+      if(rectHitCircle(b, obj.x, obj.y, obj.r || 16)){
+        obj.x = rnd(60, world.w-60);
+        obj.y = rnd(60, world.h-60);
+      }
     }
-    ctx.restore();
+  }
+  function inside(rect, x, y){
+    return x>=rect.x && x<=rect.x+rect.w && y>=rect.y && y<=rect.y+rect.h;
   }
 
+  function makeBubble(type, text, good=true){
+    return { type, text, good, x:rnd(70, world.w-70), y:rnd(70, world.h-70), r: good?26:28, bob:rnd(0,Math.PI*2) };
+  }
+  function makeCoin(){
+    return { x:rnd(60, world.w-60), y:rnd(60, world.h-60), r: 12, bob:rnd(0,Math.PI*2) };
+  }
+  function makeEnemy(){
+    return {
+      x:rnd(80, world.w-80),
+      y:rnd(80, world.h-80),
+      r: 18,
+      // EASY MODE speeds:
+      speed: 95 + state.level*6,
+      pauseT: rnd(0.5, 1.6), // pauses often
+      face: "👾"
+    };
+  }
+
+  function spawnAll(){
+    spawnBubbles();
+    spawnCoins();
+    spawnEnemies();
+  }
+
+  function spawnBubbles(){
+    const L = currentLevel();
+    bubbles = [
+      makeBubble("Subject",  L.subject[Math.floor(Math.random()*L.subject.length)], true),
+      makeBubble("Greeting", L.greeting[Math.floor(Math.random()*L.greeting.length)], true),
+      makeBubble("Sentence", L.sentence[Math.floor(Math.random()*L.sentence.length)], true),
+      makeBubble("Closing",  L.closing[Math.floor(Math.random()*L.closing.length)], true),
+    ];
+
+    // fewer bad bubbles (easier)
+    const badPick = BAD_PIECES.slice().sort(()=>Math.random()-0.5).slice(0,2);
+    bubbles.push(...badPick.map(p=>makeBubble(p.type, p.text, false)));
+
+    // keep out of safe zone a bit (so they still explore)
+    for(const b of bubbles){
+      keepOutOfBlocks(b);
+      if(inside(safeZone, b.x, b.y)){ b.x += 220; b.y += 120; }
+    }
+  }
+
+  function spawnCoins(){
+    coins = [];
+    const count = 18; // more coins = easier shop
+    for(let i=0;i<count;i++){
+      const c = makeCoin();
+      keepOutOfBlocks(c);
+      coins.push(c);
+    }
+  }
+
+  function spawnEnemies(){
+    enemies = [];
+    const count = clamp(1 + Math.floor(state.level/2), 1, 3); // max 3
+    for(let i=0;i<count;i++){
+      const e = makeEnemy();
+      // enemies spawn away from safe zone
+      do{
+        e.x = rnd(80, world.w-80);
+        e.y = rnd(80, world.h-80);
+      }while(inside(safeZone, e.x, e.y));
+      keepOutOfBlocks(e);
+      enemies.push(e);
+    }
+  }
+
+  function collectBubble(b){
+    if(!b.good){
+      // mild penalty
+      setHearts(state.hearts - 1);
+      beep(200,120);
+      showToast("🚫 Bad bubble! Try blue ones.");
+      return;
+    }
+    if(state.collected[b.type]) return;
+
+    state.collected[b.type] = b.text;
+    updateRightPanel();
+    beep(900,60);
+    showToast(`✅ Got ${b.type}!`);
+  }
+
+  function collectCoin(){
+    setCoins(state.coins + 1);
+    beep(980,35);
+  }
+
+  // Game updates
+  let last = performance.now();
+
+  function update(dt){
+    // timers
+    state.shield = Math.max(0, state.shield - dt);
+    state.speed  = Math.max(0, state.speed  - dt);
+    state.hurtCD = Math.max(0, state.hurtCD - dt);
+
+    // movement
+    let ax=0, ay=0;
+    if(keys.has("arrowleft")||keys.has("a")) ax -= 1;
+    if(keys.has("arrowright")||keys.has("d")) ax += 1;
+    if(keys.has("arrowup")||keys.has("w")) ay -= 1;
+    if(keys.has("arrowdown")||keys.has("s")) ay += 1;
+    const len = Math.hypot(ax,ay) || 1;
+    ax/=len; ay/=len;
+
+    const boost = state.speed>0 ? 1.45 : 1.0;
+    player.x += ax * player.speed * boost * dt;
+    player.y += ay * player.speed * boost * dt;
+
+    player.x = clamp(player.x, player.r+6, world.w-player.r-6);
+    player.y = clamp(player.y, player.r+6, world.h-player.r-6);
+
+    for(const b of world.blocks){
+      if(rectHitCircle(b, player.x, player.y, player.r)) pushOut(b, player);
+    }
+
+    // collect bubbles
+    for(let i=bubbles.length-1;i>=0;i--){
+      const b = bubbles[i];
+      if(Math.hypot(player.x-b.x, player.y-b.y) < player.r + b.r - 4){
+        collectBubble(b);
+        bubbles.splice(i,1);
+      }
+    }
+
+    // collect coins
+    for(let i=coins.length-1;i>=0;i--){
+      const c = coins[i];
+      if(Math.hypot(player.x-c.x, player.y-c.y) < player.r + c.r - 2){
+        collectCoin();
+        coins.splice(i,1);
+      }
+    }
+    // keep coins available
+    if(coins.length < 8){
+      for(let k=0;k<10;k++){
+        const c = makeCoin(); keepOutOfBlocks(c); coins.push(c);
+      }
+    }
+
+    // enemies (easy: pause often + avoid safe zone)
+    for(const e of enemies){
+      e.pauseT -= dt;
+      let chasing = true;
+      if(e.pauseT <= 0){
+        // alternate pause/chase
+        chasing = false;
+        e.pauseT = rnd(0.7, 1.8);
+        // 50% chance to resume chase quickly
+        if(Math.random() < 0.5) e.pauseT = rnd(0.4, 0.9);
+      }
+
+      if(chasing){
+        // if player in safe zone, enemies drift away instead of entering
+        const target = inside(safeZone, player.x, player.y)
+          ? { x: e.x + (e.x < safeZone.x ? -120 : 120), y: e.y + (e.y < safeZone.y ? -120 : 120) }
+          : player;
+
+        const dx = target.x - e.x;
+        const dy = target.y - e.y;
+        const d = Math.hypot(dx,dy) || 1;
+        e.x += (dx/d) * e.speed * dt;
+        e.y += (dy/d) * e.speed * dt;
+      }
+
+      // keep inside bounds
+      e.x = clamp(e.x, e.r+6, world.w-e.r-6);
+      e.y = clamp(e.y, e.r+6, world.h-e.r-6);
+
+      // collide blocks
+      for(const b of world.blocks){
+        if(rectHitCircle(b, e.x, e.y, e.r)) pushOut(b, e);
+      }
+
+      // hit player (very forgiving)
+      const hit = Math.hypot(player.x-e.x, player.y-e.y) < player.r + e.r - 6;
+      if(hit && state.hurtCD <= 0){
+        if(state.shield > 0){
+          beep(520,70);
+          showToast("🛡️ Shield blocked!");
+          state.hurtCD = 1.4;
+        }else{
+          setHearts(state.hearts - 1);
+          beep(180,120);
+          showToast("👾 Ouch! Run to the safe zone!");
+          state.hurtCD = 1.8; // longer invincibility
+          if(state.hearts <= 0){
+            // gentle fail: just retry popup
+            state.checking = true;
+            $("resultTitle").textContent = "Try Again 🙂";
+            $("resultStars").textContent = "⭐";
+            $("resultBody").innerHTML = "Enemies got you. Press Retry and try again!";
+            $("nextLevelBtn").textContent = (state.level >= MAX_LEVEL) ? "🎓 Get Certificate" : "➡️ Next Level";
+            $("resultOverlay").style.display = "flex";
+            refreshPause();
+          }
+        }
+      }
+    }
+  }
+
+  // Drawing
   function roundRect(ctx,x,y,w,h,r){
     const rr = Math.min(r, w/2, h/2);
     ctx.beginPath();
@@ -911,311 +1251,218 @@
     ctx.closePath();
   }
 
-  function drawBubbles(t){
+  function render(){
+    const cw = canvas.clientWidth;
+    const ch = canvas.clientHeight;
+    ctx.clearRect(0,0,cw,ch);
+
+    // scale world to canvas
+    const sx = cw / world.w;
+    const sy = ch / world.h;
     ctx.save();
-    ctx.font = "1000 12px ui-rounded, system-ui";
+    ctx.scale(sx, sy);
+
+    // background
+    const bg = ctx.createLinearGradient(0,0,world.w,world.h);
+    bg.addColorStop(0,"rgba(108,99,255,.08)");
+    bg.addColorStop(1,"rgba(0,194,255,.08)");
+    ctx.fillStyle = bg;
+    ctx.fillRect(0,0,world.w,world.h);
+
+    // safe zone
+    ctx.fillStyle = "rgba(34,197,94,.10)";
+    ctx.strokeStyle = "rgba(34,197,94,.25)";
+    ctx.lineWidth = 4;
+    roundRect(ctx, safeZone.x, safeZone.y, safeZone.w, safeZone.h, 20);
+    ctx.fill(); ctx.stroke();
+    ctx.fillStyle = "rgba(31,42,55,.55)";
+    ctx.font = "900 16px ui-rounded, system-ui";
+    ctx.fillText("🟩 SAFE ZONE", safeZone.x + 16, safeZone.y + 30);
+
+    // blocks
+    for(const b of world.blocks){
+      ctx.fillStyle = "rgba(0,0,0,.10)";
+      ctx.fillRect(b.x+6,b.y+6,b.w,b.h);
+      ctx.fillStyle = "rgba(255,255,255,.92)";
+      ctx.strokeStyle = "rgba(108,99,255,.18)";
+      ctx.lineWidth = 4;
+      roundRect(ctx, b.x,b.y,b.w,b.h,16);
+      ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "rgba(31,42,55,.50)";
+      ctx.fillText("📚", b.x+12, b.y+32);
+    }
+
+    // coins
+    for(const c of coins){
+      c.bob += 0.05;
+      const by = c.y + Math.sin(c.bob)*2;
+      ctx.fillStyle = "rgba(0,0,0,.10)";
+      ctx.beginPath(); ctx.arc(c.x+3,by+3,c.r,0,Math.PI*2); ctx.fill();
+      const g = ctx.createRadialGradient(c.x-4,by-4,2,c.x,by,c.r+10);
+      g.addColorStop(0,"rgba(245,158,11,.85)");
+      g.addColorStop(1,"rgba(245,158,11,.18)");
+      ctx.fillStyle=g;
+      ctx.strokeStyle="rgba(245,158,11,.30)";
+      ctx.lineWidth=4;
+      ctx.beginPath(); ctx.arc(c.x,by,c.r,0,Math.PI*2); ctx.fill(); ctx.stroke();
+      ctx.font="900 14px ui-rounded, system-ui";
+      ctx.fillStyle="rgba(31,42,55,.70)";
+      ctx.fillText("🪙", c.x-7, by+5);
+    }
+
+    // bubbles
+    ctx.font="1000 14px ui-rounded, system-ui";
     for(const b of bubbles){
       b.bob += 0.03;
       const by = b.y + Math.sin(b.bob)*3;
 
-      // bubble shadow
-      ctx.fillStyle = "rgba(0,0,0,.10)";
-      ctx.beginPath();
-      ctx.arc(b.x+4, by+4, b.r, 0, Math.PI*2);
-      ctx.fill();
+      ctx.fillStyle="rgba(0,0,0,.10)";
+      ctx.beginPath(); ctx.arc(b.x+4,by+4,b.r,0,Math.PI*2); ctx.fill();
 
-      // bubble body
       const isBad = !b.good;
-      const grad = ctx.createRadialGradient(b.x-8, by-8, 6, b.x, by, b.r+10);
-      if(isBad){
-        grad.addColorStop(0, "rgba(239,68,68,.75)");
-        grad.addColorStop(1, "rgba(239,68,68,.20)");
-      }else{
-        grad.addColorStop(0, "rgba(0,194,255,.55)");
-        grad.addColorStop(1, "rgba(108,99,255,.16)");
-      }
-      ctx.fillStyle = grad;
-      ctx.strokeStyle = isBad ? "rgba(239,68,68,.35)" : "rgba(108,99,255,.22)";
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.arc(b.x, by, b.r, 0, Math.PI*2);
-      ctx.fill();
-      ctx.stroke();
+      const gr = ctx.createRadialGradient(b.x-10,by-10,6,b.x,by,b.r+12);
+      if(isBad){ gr.addColorStop(0,"rgba(239,68,68,.75)"); gr.addColorStop(1,"rgba(239,68,68,.18)"); }
+      else{ gr.addColorStop(0,"rgba(0,194,255,.55)"); gr.addColorStop(1,"rgba(108,99,255,.16)"); }
+      ctx.fillStyle=gr;
+      ctx.strokeStyle=isBad ? "rgba(239,68,68,.35)" : "rgba(108,99,255,.22)";
+      ctx.lineWidth=4;
+      ctx.beginPath(); ctx.arc(b.x,by,b.r,0,Math.PI*2); ctx.fill(); ctx.stroke();
 
-      // icon + type
-      const icon = b.type==="Subject" ? "🏷️" : b.type==="Greeting" ? "👋" : b.type==="Sentence" ? "📝" : "🙏";
-      ctx.fillStyle = "rgba(31,42,55,.85)";
-      ctx.fillText(icon+" "+b.type, b.x - b.r + 10, by - 4);
-
-      // short text (trim for display)
-      const txt = b.text.length > 16 ? b.text.slice(0,16)+"…" : b.text;
-      ctx.fillStyle = "rgba(31,42,55,.72)";
-      ctx.fillText(txt, b.x - b.r + 10, by + 12);
-    }
-    ctx.restore();
-  }
-
-  function drawPlayer(){
-    ctx.save();
-    // shadow
-    ctx.fillStyle = "rgba(0,0,0,.12)";
-    ctx.beginPath();
-    ctx.ellipse(player.x+6, player.y+10, player.r*0.9, player.r*0.55, 0, 0, Math.PI*2);
-    ctx.fill();
-
-    // body
-    const grad = ctx.createRadialGradient(player.x-10, player.y-10, 6, player.x, player.y, player.r+14);
-    grad.addColorStop(0,"rgba(255,255,255,.95)");
-    grad.addColorStop(1,"rgba(108,99,255,.18)");
-    ctx.fillStyle = grad;
-    ctx.strokeStyle = "rgba(108,99,255,.28)";
-    ctx.lineWidth = 4;
-    ctx.beginPath();
-    ctx.arc(player.x, player.y, player.r, 0, Math.PI*2);
-    ctx.fill();
-    ctx.stroke();
-
-    // face
-    ctx.font = "28px ui-rounded, system-ui";
-    ctx.textAlign="center";
-    ctx.textBaseline="middle";
-    ctx.fillStyle = "rgba(31,42,55,.92)";
-    ctx.fillText(player.face, player.x, player.y+1);
-    ctx.restore();
-  }
-
-  function drawMiniLegend(){
-    ctx.save();
-    ctx.fillStyle = "rgba(255,255,255,.92)";
-    ctx.strokeStyle = "rgba(31,42,55,.12)";
-    ctx.lineWidth = 2;
-    roundRect(ctx, 12, 12, 230, 62, 16);
-    ctx.fill(); ctx.stroke();
-
-    ctx.font = "1000 12px ui-rounded, system-ui";
-    ctx.fillStyle = "rgba(31,42,55,.80)";
-    ctx.fillText("Collect: blue bubbles ✅", 22, 34);
-    ctx.fillStyle = "rgba(239,68,68,.85)";
-    ctx.fillText("Avoid: red bubbles 🚫", 22, 54);
-    ctx.restore();
-  }
-
-  // ---------- Update Loop ----------
-  let last = performance.now();
-
-  function update(dt){
-    // movement
-    let ax = 0, ay = 0;
-    if(keys.has("arrowleft") || keys.has("a")) ax -= 1;
-    if(keys.has("arrowright") || keys.has("d")) ax += 1;
-    if(keys.has("arrowup") || keys.has("w")) ay -= 1;
-    if(keys.has("arrowdown") || keys.has("s")) ay += 1;
-
-    const len = Math.hypot(ax, ay) || 1;
-    ax /= len; ay /= len;
-
-    player.vx = ax * player.speed;
-    player.vy = ay * player.speed;
-
-    player.x += player.vx * dt;
-    player.y += player.vy * dt;
-
-    player.x = clamp(player.x, player.r+6, world.w - player.r - 6);
-    player.y = clamp(player.y, player.r+6, world.h - player.r - 6);
-
-    // collide blocks
-    for(const b of world.blocks){
-      if(rectHitCircle(b, player.x, player.y, player.r)){
-        pushOut(b, player);
-      }
+      const icon = b.type==="Subject"?"🏷️":b.type==="Greeting"?"👋":b.type==="Sentence"?"📝":"🙏";
+      ctx.fillStyle="rgba(31,42,55,.86)";
+      ctx.fillText(icon+" "+b.type, b.x - b.r + 12, by - 6);
     }
 
-    // face changes while moving
-    const moving = Math.abs(player.vx) + Math.abs(player.vy) > 1;
-    player.face = hearts<=1 ? "😵" : moving ? "😄" : "🙂";
+    // enemies
+    ctx.font="28px ui-rounded, system-ui";
+    ctx.textAlign="center"; ctx.textBaseline="middle";
+    for(const e of enemies){
+      ctx.fillStyle="rgba(0,0,0,.12)";
+      ctx.beginPath(); ctx.ellipse(e.x+5,e.y+11,e.r*0.9,e.r*0.55,0,0,Math.PI*2); ctx.fill();
 
-    // collect bubbles
-    for(let i=bubbles.length-1;i>=0;i--){
-      const b = bubbles[i];
-      const dx = player.x - b.x;
-      const dy = player.y - b.y;
-      const dist = Math.hypot(dx,dy);
-      if(dist < player.r + b.r - 2){
-        collectBubble(b);
-        bubbles.splice(i,1);
-      }
+      const eg = ctx.createRadialGradient(e.x-10,e.y-10,6,e.x,e.y,e.r+14);
+      eg.addColorStop(0,"rgba(255,255,255,.95)");
+      eg.addColorStop(1,"rgba(239,68,68,.18)");
+      ctx.fillStyle=eg;
+      ctx.strokeStyle="rgba(239,68,68,.25)";
+      ctx.lineWidth=4;
+      ctx.beginPath(); ctx.arc(e.x,e.y,e.r,0,Math.PI*2); ctx.fill(); ctx.stroke();
+      ctx.fillText("👾", e.x, e.y+1);
     }
-  }
 
-  function render(t){
-    // convert to world pixels based on fixed world size
-    // canvas is scaled by resizeCanvas transform already (1 CSS pixel = 1 drawing unit)
-    // so we draw in world units and also scale to fit by drawing inside a transform
-    // We'll map world to canvas size proportionally:
-    const cw = canvas.clientWidth;
-    const ch = parseInt(canvas.style.height,10) || Math.round(cw*(520/900));
-    ctx.save();
-    ctx.clearRect(0,0,cw,ch);
+    // player + shield ring
+    if(state.shield > 0){
+      ctx.strokeStyle="rgba(0,194,255,.30)";
+      ctx.lineWidth=8;
+      ctx.beginPath(); ctx.arc(player.x,player.y,player.r+12,0,Math.PI*2); ctx.stroke();
+    }
 
-    const sx = cw / world.w;
-    const sy = ch / world.h;
-    ctx.scale(sx, sy);
-
-    drawBackground();
-    drawBlocks();
-    drawBubbles(t);
-    drawPlayer();
-    drawMiniLegend();
+    ctx.fillStyle="rgba(0,0,0,.12)";
+    ctx.beginPath(); ctx.ellipse(player.x+6,player.y+11,player.r*0.9,player.r*0.55,0,0,Math.PI*2); ctx.fill();
+    const pg = ctx.createRadialGradient(player.x-10,player.y-10,6,player.x,player.y,player.r+14);
+    pg.addColorStop(0,"rgba(255,255,255,.95)");
+    pg.addColorStop(1,"rgba(108,99,255,.18)");
+    ctx.fillStyle=pg;
+    ctx.strokeStyle="rgba(108,99,255,.28)";
+    ctx.lineWidth=5;
+    ctx.beginPath(); ctx.arc(player.x,player.y,player.r,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle="rgba(31,42,55,.92)";
+    ctx.font="28px ui-rounded, system-ui";
+    ctx.fillText(state.shield>0 ? "😎" : "🙂", player.x, player.y+1);
 
     ctx.restore();
   }
 
   function loop(t){
+    refreshPause();
+
     const dt = Math.min(0.04, (t - last) / 1000);
     last = t;
-    if(hearts > 0){
-      update(dt);
-    }
-    render(t);
+
+    // PAUSE: stop updates while popup open
+    if(!state.paused && state.hearts > 0) update(dt);
+
+    render();
     requestAnimationFrame(loop);
   }
 
-  // ---------- Result Modal ----------
-  function openResult(title, starCount, body){
-    $("resultTitle").textContent = title;
-    $("resultStars").textContent = "⭐".repeat(Math.max(1, starCount));
-    $("resultBody").innerHTML = body;
-    $("overlayResult").style.display = "flex";
-  }
-  function closeResult(){
-    $("overlayResult").style.display = "none";
-  }
+  // Buttons / Popups (pause aware)
+  $("howBtn").addEventListener("click", ()=>{
+    $("howOverlay").style.display="flex";
+    refreshPause();
+  });
+  $("closeHow").addEventListener("click", ()=>{
+    $("howOverlay").style.display="none";
+    refreshPause();
+  });
+  $("okHow").addEventListener("click", ()=>{
+    $("howOverlay").style.display="none";
+    refreshPause();
+  });
 
-  // ---------- Check Logic ----------
-  function checkWin(){
-    const L = currentLevel();
-    const name = ($("studentName").value || "").trim();
-    const rep = (t)=> (t||"").replaceAll("____", name || "____");
+  $("closeResult").addEventListener("click", ()=>{
+    $("resultOverlay").style.display="none";
+    refreshPause();
+  });
+  $("retryBtn").addEventListener("click", retryLevel);
+  $("nextLevelBtn").addEventListener("click", goNextLevel);
 
-    const missing = ["Subject","Greeting","Sentence","Closing"].filter(k=>!collected[k]);
-    if(missing.length){
-      openResult("Almost! 🌈", 1, `<p><b>Missing:</b> ${missing.join(", ")}</p><p>Go collect them!</p>`);
-      beep(220, 140);
-      return;
-    }
+  $("closeCert").addEventListener("click", ()=>{
+    $("certOverlay").style.display="none";
+    refreshPause();
+  });
+  $("savePngCert").addEventListener("click", downloadCertPNG);
+  $("restartGame").addEventListener("click", ()=>{
+    $("certOverlay").style.display="none";
+    refreshPause();
 
-    const combined = [collected.Subject, collected.Greeting, collected.Sentence, collected.Closing].join(" ");
-    if(isUnsafeText(combined)){
-      openResult("Not Safe 🚫", 1, `<p>This email includes private info.</p><p><b>Rule:</b> No passwords, phone number, or home address.</p>`);
-      beep(200, 160);
-      return;
-    }
-
-    // stars: 1) all collected 2) level-specific matches 3) all pieces are polite (we keep correct pieces polite)
-    let score = 1;
-
-    const okSubject = L.subject.includes(collected.Subject);
-    const okGreeting = L.greeting.includes(collected.Greeting);
-    const okSentence = L.sentence.includes(collected.Sentence);
-    const okClosing = L.closing.includes(collected.Closing);
-    if(okSubject && okGreeting && okSentence && okClosing) score = 3;
-    else score = 2;
-
-    setStars(score);
-
-    const preview = [
-      `To: Teacher`,
-      `Subject: ${rep(collected.Subject)}`,
-      "",
-      rep(collected.Greeting),
-      rep(collected.Sentence),
-      rep(collected.Closing)
-    ].join("\n");
-
-    if(score === 3){
-      const newSticker = unlockSticker();
-      popConfetti();
-      beep(980,80); setTimeout(()=>beep(1120,80), 90);
-      openResult("Perfect Email! 🎉", 3, `
-        <p>You built a kind + safe email!</p>
-        <div style="white-space:pre-wrap; background:#fff; border:2px solid rgba(31,42,55,.10); border-radius:16px; padding:10px; font-weight:1000; line-height:1.5;">
-${preview}
-        </div>
-        <p><b>Sticker unlocked:</b> <span style="font-size:22px;">${newSticker || "🏆"}</span></p>
-      `);
-    }else{
-      beep(420,120);
-      openResult("Nice Try! ⭐", score, `
-        <p>You earned <b>${score}</b> star(s).</p>
-        <p>Try collecting the best pieces for this level again.</p>
-      `);
-    }
-  }
-
-  // ---------- Controls ----------
-  $("howBtn").addEventListener("click", ()=> $("overlayHow").style.display="flex");
-  $("closeHow").addEventListener("click", ()=> $("overlayHow").style.display="none");
-  $("overlayHow").addEventListener("click", (e)=>{ if(e.target === $("overlayHow")) $("overlayHow").style.display="none"; });
-
-  $("closeResult").addEventListener("click", closeResult);
-  $("overlayResult").addEventListener("click", (e)=>{ if(e.target === $("overlayResult")) closeResult(); });
+    state.level = 1;
+    $("levelUI").textContent = state.level;
+    setCoins(0);
+    setStars(0);
+    retryLevel();
+    showToast("🎮 New game started!");
+  });
 
   $("resetBtn").addEventListener("click", ()=>{
+    // close any popups too
+    $("howOverlay").style.display="none";
+    $("resultOverlay").style.display="none";
+    $("certOverlay").style.display="none";
+    refreshPause();
+
+    setHearts(3); setStars(0);
+    state.shield = 10; state.speed=0; state.hurtCD=0;
+    player.x=120; player.y=120;
+    resetCollected();
+    spawnAll();
+    showToast("🔁 Reset!");
+  });
+
+  $("studentName").addEventListener("input", updateRightPanel);
+
+  // Init
+  function init(){
+    makeBlocks();
     setHearts(3);
     setStars(0);
+    setCoins(0);
+    $("levelUI").textContent = state.level;
+    const L = currentLevel();
+    $("goalText").textContent = `Goal: ${L.name} — ${L.goal}`;
     resetCollected();
-    spawnBubbles();
-    showToast("🔁 Reset! Try again.");
-    beep(520,70);
-  });
-
-  $("nextBtn").addEventListener("click", ()=>{
-    level++;
-    setHearts(3);
-    setStars(0);
-    resetCollected();
-    setHeaderGoal();
-    spawnBubbles();
-    showToast("➡️ Next Level!");
-    beep(860,70);
-  });
-
-  $("checkBtn").addEventListener("click", checkWin);
-
-  $("readBtn").addEventListener("click", ()=>{
-    const name = ($("studentName").value || "").trim();
-    const rep = (t)=> (t||"").replaceAll("____", name || "____");
-    const parts = [
-      "To: Teacher",
-      "Subject: " + rep(collected.Subject || ""),
-      rep(collected.Greeting || ""),
-      rep(collected.Sentence || ""),
-      rep(collected.Closing || "")
-    ].filter(Boolean).join(". ");
-    speak(parts);
-  });
-
-  $("studentName").addEventListener("input", updateSlots);
-
-  // ---------- Start ----------
-  makeBlocks();
-  renderStickers();
-  setHearts(3);
-  setStars(0);
-  resetCollected();
-  setHeaderGoal();
-  spawnBubbles();
-
-  // Resize on load + on window change
-  function doResize(){
+    spawnAll();
     resizeCanvas();
-    // also redraw once
-    render(performance.now());
+    refreshPause();
+    requestAnimationFrame(loop);
   }
-  window.addEventListener("resize", doResize);
-  doResize();
 
-  requestAnimationFrame(loop);
+  // Resize canvas to fit container
+  const ro = new ResizeObserver(()=>{ resizeCanvas(); });
+  ro.observe($("game").parentElement);
+  window.addEventListener("resize", resizeCanvas);
+
+  init();
 })();
 </script>
 </body>
