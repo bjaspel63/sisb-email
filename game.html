@@ -1,0 +1,1222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Email Quest Runner (Grade 1)</title>
+<style>
+  :root{
+    --bg1:#fff1f8;
+    --bg2:#e9fbff;
+    --ink:#1f2a37;
+    --muted:#5b6b7a;
+    --purple:#6c63ff;
+    --blue:#00c2ff;
+    --green:#22c55e;
+    --orange:#f59e0b;
+    --red:#ef4444;
+    --card:#ffffffcc;
+    --stroke: rgba(31,42,55,.12);
+    --stroke2: rgba(108,99,255,.18);
+    --shadow: 0 16px 40px rgba(0,0,0,.14);
+    --radius: 24px;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    font-family: ui-rounded, "Comic Sans MS", "Trebuchet MS", system-ui, -apple-system, Segoe UI, Arial;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 800px at 15% 10%, var(--bg1), transparent 62%),
+      radial-gradient(1200px 800px at 85% 35%, var(--bg2), transparent 62%),
+      linear-gradient(180deg, #ffffff, #f7fbff);
+    padding: 14px;
+  }
+  body::before{
+    content:"";
+    position:fixed; inset:0; pointer-events:none; opacity:.22;
+    background-image:
+      radial-gradient(circle at 25% 20%, rgba(108,99,255,.35) 0 6px, transparent 7px),
+      radial-gradient(circle at 75% 30%, rgba(0,194,255,.35) 0 7px, transparent 8px),
+      radial-gradient(circle at 35% 78%, rgba(34,197,94,.35) 0 6px, transparent 7px),
+      radial-gradient(circle at 80% 80%, rgba(245,158,11,.35) 0 7px, transparent 8px);
+    background-size: 220px 220px;
+    mix-blend-mode:multiply;
+  }
+
+  .wrap{ max-width: 1100px; margin: 0 auto; position:relative; }
+  header{
+    display:flex; gap:12px; flex-wrap:wrap; align-items:stretch; justify-content:space-between;
+    margin-bottom: 12px;
+  }
+  .hero{
+    flex:1;
+    background:var(--card);
+    border:2px solid var(--stroke2);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 12px 14px;
+    min-width: 280px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";
+    position:absolute; right:-50px; top:-40px;
+    width:220px; height:220px; border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, rgba(108,99,255,.18), transparent 62%);
+    transform: rotate(12deg);
+  }
+
+  .topRow{
+    display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
+    position:relative; z-index:2;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .mascot{
+    width:52px; height:52px; border-radius:18px; display:grid; place-items:center;
+    background: linear-gradient(135deg, rgba(108,99,255,.18), rgba(0,194,255,.18));
+    border:2px solid rgba(108,99,255,.18);
+    box-shadow: 0 10px 22px rgba(0,0,0,.12);
+    font-size: 30px;
+    transform: rotate(-3deg);
+  }
+  h1{ margin:0; font-size: 20px; }
+  .sub{ margin:2px 0 0; font-size: 13px; font-weight: 900; color: var(--muted); }
+
+  .hudRow{
+    display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; align-items:center;
+  }
+  .pill{
+    display:flex; align-items:center; gap:8px;
+    padding: 8px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.88);
+    border:2px solid var(--stroke);
+    box-shadow: 0 10px 18px rgba(0,0,0,.10);
+    font-weight: 1000;
+    user-select:none;
+  }
+  .hearts{ letter-spacing:2px; }
+  .stars{ letter-spacing:2px; }
+  .controls{
+    display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end;
+    min-width: 310px;
+  }
+  .nameBox{
+    display:flex; align-items:center; gap:8px;
+    padding: 10px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.88);
+    border:2px solid var(--stroke);
+    box-shadow: 0 12px 22px rgba(0,0,0,.12);
+  }
+  .nameBox label{ font-size:12px; font-weight:1000; color:var(--muted); }
+  .nameBox input{
+    width: 170px;
+    border:0; outline:none;
+    background: transparent;
+    font-weight: 1000;
+    font-size: 14px;
+  }
+
+  .btn{
+    border:0;
+    border-radius: 999px;
+    padding: 12px 14px;
+    cursor:pointer;
+    font-weight: 1100;
+    box-shadow: 0 12px 22px rgba(0,0,0,.12);
+    background:#fff;
+    color:var(--ink);
+    border:2px solid rgba(108,99,255,.16);
+    user-select:none;
+    display:flex; align-items:center; gap:8px;
+    transition: transform .06s ease, filter .2s ease;
+    white-space:nowrap;
+  }
+  .btn:hover{ filter: brightness(1.02); }
+  .btn:active{ transform: translateY(1px) scale(.99); }
+  .btnPrimary{ background: linear-gradient(135deg, var(--purple), var(--blue)); color:#fff; border:0; }
+  .btnSoft{ background: rgba(34,197,94,.14); border:2px solid rgba(34,197,94,.26); }
+  .btnWarn{ background: rgba(245,158,11,.14); border:2px solid rgba(245,158,11,.26); }
+
+  .bar{
+    margin-top: 10px;
+    background: rgba(255,255,255,.75);
+    border:2px solid var(--stroke);
+    border-radius:999px;
+    padding:6px;
+    position:relative;
+    z-index:2;
+    box-shadow: 0 10px 18px rgba(0,0,0,.08);
+  }
+  .barTrack{
+    height: 14px; border-radius:999px;
+    background: linear-gradient(90deg, rgba(108,99,255,.30), rgba(0,194,255,.30));
+    overflow:hidden;
+  }
+  .barFill{
+    height:100%;
+    width:0%;
+    border-radius:999px;
+    background: linear-gradient(90deg, var(--purple), var(--blue));
+    transition: width .25s ease;
+  }
+  .barText{
+    margin-top: 6px;
+    font-size: 12px;
+    font-weight: 900;
+    color: var(--muted);
+    display:flex; gap:10px; flex-wrap:wrap;
+    justify-content:space-between;
+    align-items:center;
+  }
+
+  .main{
+    display:grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 12px;
+  }
+  @media (max-width: 920px){ .main{ grid-template-columns:1fr; } }
+
+  .panel{
+    background: var(--card);
+    border:2px solid var(--stroke2);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 12px;
+    position:relative;
+    overflow:hidden;
+  }
+  .panelHead{
+    display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    margin-bottom: 10px;
+  }
+  .panelHead h2{ margin:0; font-size: 16px; }
+  .help{ margin:0; font-size: 13px; font-weight: 900; color: var(--muted); }
+
+  /* GAME AREA */
+  .gameWrap{
+    position:relative;
+    border-radius: 20px;
+    border:2px solid rgba(31,42,55,.12);
+    background: rgba(255,255,255,.88);
+    overflow:hidden;
+  }
+  canvas{ display:block; width:100%; height:auto; }
+
+  /* Right: Backpack + email preview */
+  .backpack{
+    display:grid;
+    gap: 10px;
+  }
+  .card{
+    background: rgba(255,255,255,.92);
+    border-radius: 20px;
+    border:2px solid rgba(31,42,55,.12);
+    padding: 10px;
+  }
+  .cardTitle{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    font-weight: 1100;
+    margin-bottom: 8px;
+  }
+  .slots{
+    display:grid;
+    gap: 8px;
+  }
+  .slot{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding: 10px 12px;
+    border-radius: 16px;
+    border:2px dashed rgba(31,42,55,.20);
+    background: #fff;
+    font-weight: 1000;
+  }
+  .slot.empty{ color: rgba(31,42,55,.45); }
+  .mini{ font-size:12px; font-weight:900; color: var(--muted); }
+
+  .previewBox{
+    white-space: pre-wrap;
+    line-height: 1.5;
+    font-weight: 1000;
+    background: #fff;
+    border: 2px solid rgba(31,42,55,.10);
+    border-radius: 16px;
+    padding: 10px;
+    min-height: 120px;
+  }
+
+  .toast{
+    position:fixed;
+    left:50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,.96);
+    border: 2px solid rgba(31,42,55,.12);
+    border-radius: 999px;
+    padding: 10px 14px;
+    box-shadow: var(--shadow);
+    display:none;
+    max-width: min(860px, calc(100vw - 24px));
+    font-weight: 1100;
+    z-index: 80;
+  }
+
+  /* Modals */
+  .overlay{
+    position:fixed; inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding: 18px;
+    background: rgba(15,23,42,.55);
+    z-index: 90;
+  }
+  .modal{
+    width: min(820px, 100%);
+    background:#fff;
+    border-radius: 26px;
+    border:2px solid rgba(108,99,255,.20);
+    box-shadow: var(--shadow);
+    padding: 14px;
+  }
+  .modalTop{
+    display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
+    margin-bottom: 8px;
+  }
+  .modalTop h3{ margin:0; }
+  .bigStars{ font-size: 44px; text-align:center; margin: 8px 0; }
+  .safeBox{
+    background: rgba(0,194,255,.10);
+    border: 2px solid rgba(0,194,255,.22);
+    border-radius: 18px;
+    padding: 10px;
+    margin-top: 10px;
+    font-weight: 1000;
+  }
+
+  /* Confetti */
+  .confetti{
+    position: fixed;
+    inset: 0;
+    pointer-events:none;
+    overflow:hidden;
+    display:none;
+    z-index: 120;
+  }
+  .confetti i{
+    position:absolute;
+    width: 10px; height: 16px;
+    border-radius: 4px;
+    opacity:.9;
+    animation: fall 1100ms linear forwards;
+  }
+  @keyframes fall{
+    from{ transform: translateY(-30px) rotate(0deg); }
+    to{ transform: translateY(calc(100vh + 40px)) rotate(540deg); }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="hero">
+      <div class="topRow">
+        <div class="brand">
+          <div class="mascot" aria-hidden="true">🕹️</div>
+          <div>
+            <h1>Email Quest Runner (Grade 1)</h1>
+            <p class="sub">Move → collect email pieces → build a kind & safe email!</p>
+          </div>
+        </div>
+
+        <div class="hudRow">
+          <div class="pill">🧩 Level: <span id="levelUI">1</span></div>
+          <div class="pill">❤️ <span class="hearts" id="heartsUI">♥♥♥</span></div>
+          <div class="pill">⭐ <span class="stars" id="starsUI">☆☆☆</span></div>
+          <div class="pill">🏆 Stickers: <span id="stickerUI">0</span>/6</div>
+        </div>
+      </div>
+
+      <div class="bar">
+        <div class="barTrack"><div class="barFill" id="barFill"></div></div>
+        <div class="barText">
+          <span id="goalText">Goal: Collect 4 correct pieces.</span>
+          <span id="tipText">Tip: Avoid “password/phone/address”!</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="nameBox">
+        <label for="studentName">Student</label>
+        <input id="studentName" type="text" placeholder="Type your name" maxlength="20" />
+      </div>
+      <button class="btn btnSoft" id="howBtn">📘 How</button>
+      <button class="btn btnWarn" id="resetBtn">🔁 Reset</button>
+      <button class="btn btnPrimary" id="nextBtn">➡️ Next Level</button>
+    </div>
+  </header>
+
+  <div class="main">
+    <section class="panel">
+      <div class="panelHead">
+        <h2>🎮 Playground</h2>
+        <p class="help">Move: <b>Arrow Keys</b> or <b>WASD</b> • Collect bubbles • Avoid red!</p>
+      </div>
+
+      <div class="gameWrap">
+        <canvas id="game" width="900" height="520"></canvas>
+      </div>
+      <p class="mini" style="margin:10px 2px 0;">
+        Teacher mode idea: project this on screen, students take turns collecting the pieces.
+      </p>
+    </section>
+
+    <aside class="panel">
+      <div class="panelHead">
+        <h2>🎒 Backpack + Email</h2>
+        <p class="help">Collect all 4 to win ⭐⭐⭐</p>
+      </div>
+
+      <div class="backpack">
+        <div class="card">
+          <div class="cardTitle">✅ Collected Pieces <span class="mini" id="collectedCount">0/4</span></div>
+          <div class="slots">
+            <div class="slot empty" id="slotTo">To: (auto)</div>
+            <div class="slot empty" id="slotSubject">Subject: (none)</div>
+            <div class="slot empty" id="slotGreeting">Greeting: (none)</div>
+            <div class="slot empty" id="slotSentence">Sentence: (none)</div>
+            <div class="slot empty" id="slotClosing">Closing: (none)</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="cardTitle">📨 Email Preview <span class="mini">safe + kind</span></div>
+          <div class="previewBox" id="preview"></div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; justify-content:flex-end;">
+            <button class="btn" id="readBtn">🔊 Read</button>
+            <button class="btn btnPrimary" id="checkBtn">✅ Check</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="cardTitle">🏆 Stickers</div>
+          <div id="stickers" style="display:flex; gap:10px; flex-wrap:wrap;"></div>
+          <p class="mini" style="margin:8px 0 0;">Win ⭐⭐⭐ to unlock a sticker.</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Modals -->
+<div class="overlay" id="overlayHow">
+  <div class="modal">
+    <div class="modalTop">
+      <h3>📘 How to Play</h3>
+      <button class="btn" id="closeHow">✖ Close</button>
+    </div>
+    <ul style="margin:8px 0 0; font-weight:1000; color: var(--muted); line-height:1.6;">
+      <li>Move your character with <b>Arrow Keys</b> or <b>WASD</b>.</li>
+      <li>Collect <b>4 correct bubbles</b>: Subject, Greeting, Sentence, Closing.</li>
+      <li><b>Avoid unsafe bubbles</b> (password / phone / address). Those are red.</li>
+      <li>When you collect all 4, press <b>✅ Check</b> to earn stars and stickers.</li>
+    </ul>
+    <div class="safeBox">✅ Safe rule: Never share passwords, phone number, or home address in email.</div>
+  </div>
+</div>
+
+<div class="overlay" id="overlayResult">
+  <div class="modal">
+    <div class="modalTop">
+      <h3 id="resultTitle">Result</h3>
+      <button class="btn" id="closeResult">✖ Close</button>
+    </div>
+    <div class="bigStars" id="resultStars">⭐</div>
+    <div id="resultBody" style="font-weight:1000; color: var(--muted);"></div>
+    <div class="safeBox">✅ Email should be <b>kind</b> and <b>safe</b>.</div>
+  </div>
+</div>
+
+<div class="confetti" id="confetti"></div>
+
+<script>
+(() => {
+  // ---------- Helpers ----------
+  const $ = (id)=>document.getElementById(id);
+  const clamp = (v,min,max)=>Math.max(min,Math.min(max,v));
+  const rnd = (a,b)=>a+Math.random()*(b-a);
+
+  function showToast(msg){
+    const t = $("toast");
+    t.textContent = msg;
+    t.style.display = "block";
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(()=>t.style.display="none", 1400);
+  }
+
+  function beep(freq=700, ms=70){
+    try{
+      const ctx = beep._ctx || (beep._ctx = new (window.AudioContext||window.webkitAudioContext)());
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type="sine"; o.frequency.value=freq;
+      g.gain.value=0.03;
+      o.connect(g); g.connect(ctx.destination);
+      o.start();
+      setTimeout(()=>o.stop(), ms);
+    }catch{}
+  }
+
+  function popConfetti(){
+    const confetti = $("confetti");
+    confetti.innerHTML = "";
+    confetti.style.display = "block";
+    const colors = [
+      "rgba(108,99,255,.9)","rgba(0,194,255,.9)","rgba(34,197,94,.9)",
+      "rgba(245,158,11,.9)","rgba(255,99,132,.85)"
+    ];
+    for(let i=0;i<70;i++){
+      const el=document.createElement("i");
+      el.style.left=(Math.random()*100)+"vw";
+      el.style.top=(-20-Math.random()*120)+"px";
+      el.style.background=colors[Math.floor(Math.random()*colors.length)];
+      el.style.transform=`rotate(${Math.random()*360}deg)`;
+      el.style.animationDuration=(900+Math.random()*700)+"ms";
+      confetti.appendChild(el);
+    }
+    setTimeout(()=>confetti.style.display="none", 1300);
+  }
+
+  function speak(text){
+    if(!("speechSynthesis" in window)){ showToast("Read aloud not supported."); return; }
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 0.95;
+    window.speechSynthesis.speak(u);
+  }
+
+  // ---------- Stickers ----------
+  const STICKERS = ["🦄","🐯","🚀","🧁","🌈","🏆"];
+  const STICKER_KEY = "email_runner_stickers_v1";
+  function loadStickers(){
+    try{
+      const raw = localStorage.getItem(STICKER_KEY);
+      const arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr : [];
+    }catch{ return []; }
+  }
+  function saveStickers(arr){ localStorage.setItem(STICKER_KEY, JSON.stringify(arr)); }
+  let unlocked = loadStickers();
+
+  function renderStickers(){
+    const box = $("stickers");
+    box.innerHTML = "";
+    STICKERS.forEach((s,i)=>{
+      const d = document.createElement("div");
+      d.textContent = s;
+      d.style.width="44px";
+      d.style.height="44px";
+      d.style.display="grid";
+      d.style.placeItems="center";
+      d.style.borderRadius="16px";
+      d.style.border="2px solid rgba(31,42,55,.10)";
+      d.style.background="rgba(255,255,255,.9)";
+      d.style.boxShadow="0 10px 18px rgba(0,0,0,.10)";
+      d.style.fontSize="26px";
+      d.style.opacity = unlocked.includes(i) ? "1" : ".3";
+      box.appendChild(d);
+    });
+    $("stickerUI").textContent = unlocked.length;
+  }
+  function unlockSticker(){
+    for(let i=0;i<STICKERS.length;i++){
+      if(!unlocked.includes(i)){
+        unlocked.push(i);
+        saveStickers(unlocked);
+        renderStickers();
+        return STICKERS[i];
+      }
+    }
+    return null;
+  }
+
+  // ---------- Level Content ----------
+  // Each level has *different* correct options.
+  const LEVELS = [
+    {
+      name:"Say Hello",
+      goal:"Collect Subject + Greeting + Sentence + Closing.",
+      tip:"Start friendly: Hello!",
+      subject: ["Hello Teacher", "Hello!"],
+      greeting: ["Hello Teacher,", "Hi Teacher,"],
+      sentence: ["My name is ____.", "I am in Grade 1."],
+      closing: ["Thank you.", "From, ____"],
+    },
+    {
+      name:"What I Learned",
+      goal:"Collect learning email pieces.",
+      tip:"One short sentence is perfect!",
+      subject: ["Today I learned", "My ICT learning"],
+      greeting: ["Dear Teacher,", "Hello Teacher,"],
+      sentence: ["Today I learned how to type.", "Today I learned how to save."],
+      closing: ["Thank you.", "Have a nice day!"],
+    },
+    {
+      name:"Ask a Kind Question",
+      goal:"Collect question email pieces.",
+      tip:"Ask politely: please!",
+      subject: ["A question", "Question for you"],
+      greeting: ["Hello Teacher,", "Dear Teacher,"],
+      sentence: ["Can you help me, please?", "How do I open my file?"],
+      closing: ["Thank you.", "From, ____"],
+    },
+    {
+      name:"Be a Kind Classmate",
+      goal:"Collect kind message pieces.",
+      tip:"Kind words are powerful!",
+      subject: ["Kind message", "Hello friend"],
+      greeting: ["Hello,", "Hi there,"],
+      sentence: ["Great job today!", "I like your drawing."],
+      closing: ["From, ____", "Thank you."],
+    }
+  ];
+
+  // “Bad/unsafe” pieces appear in the map (avoid).
+  const BAD_PIECES = [
+    {type:"Sentence", text:"My password is 1234.", reason:"password"},
+    {type:"Sentence", text:"Call me at 09____.", reason:"phone"},
+    {type:"Sentence", text:"My home is at ____ street.", reason:"address"},
+    {type:"Subject", text:"FREE MONEY!!!", reason:"spam"},
+    {type:"Greeting", text:"HEY!!!", reason:"rude"},
+    {type:"Closing", text:"DO IT NOW!", reason:"rude"},
+  ];
+
+  // ---------- Game State ----------
+  let level = 1;
+  let hearts = 3;
+  let stars = 0;
+
+  const collected = {
+    To: null,
+    Subject: null,
+    Greeting: null,
+    Sentence: null,
+    Closing: null
+  };
+
+  function setStars(n){
+    stars = clamp(n,0,3);
+    $("starsUI").textContent = "★".repeat(stars) + "☆".repeat(3-stars);
+    $("barFill").style.width = (stars/3*100) + "%";
+  }
+  function setHearts(n){
+    hearts = clamp(n,0,3);
+    $("heartsUI").textContent = "♥".repeat(hearts) + "♡".repeat(3-hearts);
+  }
+
+  function currentLevel(){
+    return LEVELS[(level-1) % LEVELS.length];
+  }
+
+  function resetCollected(){
+    collected.To = "Teacher (auto)";
+    collected.Subject = null;
+    collected.Greeting = null;
+    collected.Sentence = null;
+    collected.Closing = null;
+    updateSlots();
+  }
+
+  function updateSlots(){
+    const slot = (id, label, val)=>{
+      const el = $(id);
+      if(val){
+        el.classList.remove("empty");
+        el.textContent = `${label}: ${val}`;
+      }else{
+        el.classList.add("empty");
+        el.textContent = `${label}: (none)`;
+      }
+    };
+    $("slotTo").classList.remove("empty");
+    $("slotTo").textContent = `To: ${collected.To || "Teacher (auto)"}`;
+    slot("slotSubject","Subject",collected.Subject);
+    slot("slotGreeting","Greeting",collected.Greeting);
+    slot("slotSentence","Sentence",collected.Sentence);
+    slot("slotClosing","Closing",collected.Closing);
+
+    const have = ["Subject","Greeting","Sentence","Closing"].filter(k=>!!collected[k]).length;
+    $("collectedCount").textContent = `${have}/4`;
+
+    const name = ($("studentName").value || "").trim();
+    const rep = (t)=> (t||"").replaceAll("____", name || "____");
+    const preview = [
+      `To: Teacher`,
+      `Subject: ${rep(collected.Subject||"")}`,
+      "",
+      rep(collected.Greeting||""),
+      rep(collected.Sentence||""),
+      rep(collected.Closing||"")
+    ].filter(x=>x!=="" || x==="").join("\n");
+    $("preview").textContent = preview.trim() ? preview : "Collect pieces to build your email!";
+  }
+
+  function setHeaderGoal(){
+    const L = currentLevel();
+    $("levelUI").textContent = level;
+    $("goalText").textContent = `Goal: ${L.name} — ${L.goal}`;
+    $("tipText").textContent = `Tip: ${L.tip}`;
+  }
+
+  // ---------- Canvas Game ----------
+  const canvas = $("game");
+  const ctx = canvas.getContext("2d");
+
+  // Make canvas crisp on HiDPI
+  function resizeCanvas(){
+    const cssW = canvas.clientWidth;
+    const cssH = Math.round(cssW * (520/900)); // keep aspect ratio
+    canvas.style.height = cssH + "px";
+    const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    canvas.width = Math.round(cssW * dpr);
+    canvas.height = Math.round(cssH * dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+
+  const keys = new Set();
+  window.addEventListener("keydown", (e)=>{
+    const k = e.key.toLowerCase();
+    if(["arrowup","arrowdown","arrowleft","arrowright","w","a","s","d"].includes(k)){
+      keys.add(k);
+      e.preventDefault();
+    }
+  }, {passive:false});
+  window.addEventListener("keyup", (e)=>{
+    keys.delete(e.key.toLowerCase());
+  });
+
+  const world = {
+    w: 900, h: 520,
+    // cute obstacles
+    blocks: []
+  };
+
+  function makeBlocks(){
+    world.blocks = [
+      {x: 160, y: 120, w: 120, h: 40},
+      {x: 420, y: 90,  w: 160, h: 44},
+      {x: 620, y: 180, w: 110, h: 40},
+      {x: 270, y: 300, w: 160, h: 44},
+      {x: 540, y: 320, w: 190, h: 44},
+    ];
+  }
+
+  const player = {
+    x: 90, y: 90,
+    r: 18,
+    vx: 0, vy: 0,
+    speed: 220,
+    face: "🙂"
+  };
+
+  function rectHitCircle(rect, cx, cy, r){
+    const closestX = clamp(cx, rect.x, rect.x + rect.w);
+    const closestY = clamp(cy, rect.y, rect.y + rect.h);
+    const dx = cx - closestX;
+    const dy = cy - closestY;
+    return (dx*dx + dy*dy) <= r*r;
+  }
+
+  function pushOut(rect, p){
+    // Simple push-out by checking which side is closest
+    const cx = p.x, cy = p.y, r = p.r;
+    const left = Math.abs((rect.x) - (cx + r));
+    const right = Math.abs((rect.x + rect.w) - (cx - r));
+    const top = Math.abs((rect.y) - (cy + r));
+    const bottom = Math.abs((rect.y + rect.h) - (cy - r));
+    const min = Math.min(left,right,top,bottom);
+    if(min === left) p.x = rect.x - r;
+    else if(min === right) p.x = rect.x + rect.w + r;
+    else if(min === top) p.y = rect.y - r;
+    else p.y = rect.y + rect.h + r;
+  }
+
+  // Collectibles
+  let bubbles = [];
+
+  function makeBubble(type, text, good=true){
+    return {
+      type, text, good,
+      x: rnd(60, world.w-60),
+      y: rnd(60, world.h-60),
+      r: good ? 22 : 24,
+      bob: rnd(0, Math.PI*2),
+    };
+  }
+
+  function spawnBubbles(){
+    const L = currentLevel();
+    bubbles = [];
+    // correct set: 1 each
+    bubbles.push(makeBubble("Subject", L.subject[Math.floor(Math.random()*L.subject.length)], true));
+    bubbles.push(makeBubble("Greeting", L.greeting[Math.floor(Math.random()*L.greeting.length)], true));
+    bubbles.push(makeBubble("Sentence", L.sentence[Math.floor(Math.random()*L.sentence.length)], true));
+    bubbles.push(makeBubble("Closing", L.closing[Math.floor(Math.random()*L.closing.length)], true));
+
+    // add extras (good distractors)
+    const goodExtras = [
+      makeBubble("Subject","My message", true),
+      makeBubble("Greeting","Hello!", true),
+      makeBubble("Closing","Bye.", true),
+      makeBubble("Sentence","I like ICT.", true),
+    ];
+    // add bad/unsafe
+    const badExtras = BAD_PIECES.map(p => makeBubble(p.type, p.text, false));
+
+    // choose some extras
+    const pick = (arr,n)=>{
+      const a = arr.slice().sort(()=>Math.random()-0.5);
+      return a.slice(0,n);
+    };
+    bubbles.push(...pick(goodExtras, 3));
+    bubbles.push(...pick(badExtras, 4));
+
+    // keep bubbles out of blocks
+    for(const b of bubbles){
+      for(const bl of world.blocks){
+        if(rectHitCircle(bl, b.x, b.y, b.r)){
+          b.x = rnd(60, world.w-60);
+          b.y = rnd(60, world.h-60);
+        }
+      }
+    }
+  }
+
+  function hasCollected(type){
+    return !!collected[type];
+  }
+
+  function collectBubble(b){
+    if(!b.good){
+      // bad/unsafe
+      setHearts(hearts - 1);
+      beep(200, 140);
+      showToast("🚫 Unsafe bubble! Avoid passwords/phone/address.");
+      if(hearts <= 0){
+        openResult("Oops! 💔", 1, "You lost all hearts. Click Reset and try again.");
+      }
+      return;
+    }
+
+    // good bubble
+    if(hasCollected(b.type)){
+      beep(520, 70);
+      showToast("✅ You already have that piece!");
+      return;
+    }
+
+    collected[b.type] = b.text;
+    updateSlots();
+    beep(860, 70);
+    showToast(`🎉 Collected: ${b.type}!`);
+
+    // star progress based on how many of 4 collected
+    const have = ["Subject","Greeting","Sentence","Closing"].filter(k=>!!collected[k]).length;
+    // (0..4) map to stars roughly
+    setStars(have >= 4 ? 3 : (have >= 3 ? 2 : (have >= 1 ? 1 : 0)));
+
+    // win condition: all 4 collected
+    if(have === 4){
+      beep(980, 80); setTimeout(()=>beep(1120,80), 90);
+      showToast("🏁 All pieces collected! Press ✅ Check!");
+    }
+  }
+
+  function isUnsafeText(text){
+    const t = (text||"").toLowerCase();
+    const bad = ["password","phone","call me","address","street","credit card"];
+    return bad.some(w => t.includes(w));
+  }
+
+  // ---------- Drawing ----------
+  function drawBackground(){
+    // grass-like tiles
+    const w = world.w, h = world.h;
+    ctx.save();
+    ctx.fillStyle = "rgba(255,255,255,.0)";
+    ctx.clearRect(0,0,w,h);
+
+    // soft playfield
+    const grad = ctx.createLinearGradient(0,0,w,h);
+    grad.addColorStop(0, "rgba(108,99,255,.08)");
+    grad.addColorStop(1, "rgba(0,194,255,.08)");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0,0,w,h);
+
+    // cute dots
+    for(let i=0;i<140;i++){
+      const x = (i*73) % w;
+      const y = ((i*129) % h);
+      ctx.fillStyle = i%3===0 ? "rgba(108,99,255,.10)" : (i%3===1 ? "rgba(0,194,255,.10)" : "rgba(34,197,94,.10)");
+      ctx.beginPath();
+      ctx.arc(x, y, 4, 0, Math.PI*2);
+      ctx.fill();
+    }
+
+    // border
+    ctx.strokeStyle = "rgba(31,42,55,.12)";
+    ctx.lineWidth = 4;
+    ctx.strokeRect(2,2,w-4,h-4);
+    ctx.restore();
+  }
+
+  function drawBlocks(){
+    ctx.save();
+    for(const b of world.blocks){
+      // shadow
+      ctx.fillStyle = "rgba(0,0,0,.10)";
+      ctx.fillRect(b.x+6, b.y+6, b.w, b.h);
+
+      // block
+      ctx.fillStyle = "rgba(255,255,255,.92)";
+      ctx.strokeStyle = "rgba(108,99,255,.18)";
+      ctx.lineWidth = 3;
+      roundRect(ctx, b.x, b.y, b.w, b.h, 16);
+      ctx.fill();
+      ctx.stroke();
+
+      // label
+      ctx.fillStyle = "rgba(31,42,55,.55)";
+      ctx.font = "900 12px ui-rounded, system-ui";
+      ctx.fillText("📚", b.x + 10, b.y + 26);
+    }
+    ctx.restore();
+  }
+
+  function roundRect(ctx,x,y,w,h,r){
+    const rr = Math.min(r, w/2, h/2);
+    ctx.beginPath();
+    ctx.moveTo(x+rr,y);
+    ctx.arcTo(x+w,y,x+w,y+h,rr);
+    ctx.arcTo(x+w,y+h,x,y+h,rr);
+    ctx.arcTo(x,y+h,x,y,rr);
+    ctx.arcTo(x,y,x+w,y,rr);
+    ctx.closePath();
+  }
+
+  function drawBubbles(t){
+    ctx.save();
+    ctx.font = "1000 12px ui-rounded, system-ui";
+    for(const b of bubbles){
+      b.bob += 0.03;
+      const by = b.y + Math.sin(b.bob)*3;
+
+      // bubble shadow
+      ctx.fillStyle = "rgba(0,0,0,.10)";
+      ctx.beginPath();
+      ctx.arc(b.x+4, by+4, b.r, 0, Math.PI*2);
+      ctx.fill();
+
+      // bubble body
+      const isBad = !b.good;
+      const grad = ctx.createRadialGradient(b.x-8, by-8, 6, b.x, by, b.r+10);
+      if(isBad){
+        grad.addColorStop(0, "rgba(239,68,68,.75)");
+        grad.addColorStop(1, "rgba(239,68,68,.20)");
+      }else{
+        grad.addColorStop(0, "rgba(0,194,255,.55)");
+        grad.addColorStop(1, "rgba(108,99,255,.16)");
+      }
+      ctx.fillStyle = grad;
+      ctx.strokeStyle = isBad ? "rgba(239,68,68,.35)" : "rgba(108,99,255,.22)";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(b.x, by, b.r, 0, Math.PI*2);
+      ctx.fill();
+      ctx.stroke();
+
+      // icon + type
+      const icon = b.type==="Subject" ? "🏷️" : b.type==="Greeting" ? "👋" : b.type==="Sentence" ? "📝" : "🙏";
+      ctx.fillStyle = "rgba(31,42,55,.85)";
+      ctx.fillText(icon+" "+b.type, b.x - b.r + 10, by - 4);
+
+      // short text (trim for display)
+      const txt = b.text.length > 16 ? b.text.slice(0,16)+"…" : b.text;
+      ctx.fillStyle = "rgba(31,42,55,.72)";
+      ctx.fillText(txt, b.x - b.r + 10, by + 12);
+    }
+    ctx.restore();
+  }
+
+  function drawPlayer(){
+    ctx.save();
+    // shadow
+    ctx.fillStyle = "rgba(0,0,0,.12)";
+    ctx.beginPath();
+    ctx.ellipse(player.x+6, player.y+10, player.r*0.9, player.r*0.55, 0, 0, Math.PI*2);
+    ctx.fill();
+
+    // body
+    const grad = ctx.createRadialGradient(player.x-10, player.y-10, 6, player.x, player.y, player.r+14);
+    grad.addColorStop(0,"rgba(255,255,255,.95)");
+    grad.addColorStop(1,"rgba(108,99,255,.18)");
+    ctx.fillStyle = grad;
+    ctx.strokeStyle = "rgba(108,99,255,.28)";
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.arc(player.x, player.y, player.r, 0, Math.PI*2);
+    ctx.fill();
+    ctx.stroke();
+
+    // face
+    ctx.font = "28px ui-rounded, system-ui";
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
+    ctx.fillStyle = "rgba(31,42,55,.92)";
+    ctx.fillText(player.face, player.x, player.y+1);
+    ctx.restore();
+  }
+
+  function drawMiniLegend(){
+    ctx.save();
+    ctx.fillStyle = "rgba(255,255,255,.92)";
+    ctx.strokeStyle = "rgba(31,42,55,.12)";
+    ctx.lineWidth = 2;
+    roundRect(ctx, 12, 12, 230, 62, 16);
+    ctx.fill(); ctx.stroke();
+
+    ctx.font = "1000 12px ui-rounded, system-ui";
+    ctx.fillStyle = "rgba(31,42,55,.80)";
+    ctx.fillText("Collect: blue bubbles ✅", 22, 34);
+    ctx.fillStyle = "rgba(239,68,68,.85)";
+    ctx.fillText("Avoid: red bubbles 🚫", 22, 54);
+    ctx.restore();
+  }
+
+  // ---------- Update Loop ----------
+  let last = performance.now();
+
+  function update(dt){
+    // movement
+    let ax = 0, ay = 0;
+    if(keys.has("arrowleft") || keys.has("a")) ax -= 1;
+    if(keys.has("arrowright") || keys.has("d")) ax += 1;
+    if(keys.has("arrowup") || keys.has("w")) ay -= 1;
+    if(keys.has("arrowdown") || keys.has("s")) ay += 1;
+
+    const len = Math.hypot(ax, ay) || 1;
+    ax /= len; ay /= len;
+
+    player.vx = ax * player.speed;
+    player.vy = ay * player.speed;
+
+    player.x += player.vx * dt;
+    player.y += player.vy * dt;
+
+    player.x = clamp(player.x, player.r+6, world.w - player.r - 6);
+    player.y = clamp(player.y, player.r+6, world.h - player.r - 6);
+
+    // collide blocks
+    for(const b of world.blocks){
+      if(rectHitCircle(b, player.x, player.y, player.r)){
+        pushOut(b, player);
+      }
+    }
+
+    // face changes while moving
+    const moving = Math.abs(player.vx) + Math.abs(player.vy) > 1;
+    player.face = hearts<=1 ? "😵" : moving ? "😄" : "🙂";
+
+    // collect bubbles
+    for(let i=bubbles.length-1;i>=0;i--){
+      const b = bubbles[i];
+      const dx = player.x - b.x;
+      const dy = player.y - b.y;
+      const dist = Math.hypot(dx,dy);
+      if(dist < player.r + b.r - 2){
+        collectBubble(b);
+        bubbles.splice(i,1);
+      }
+    }
+  }
+
+  function render(t){
+    // convert to world pixels based on fixed world size
+    // canvas is scaled by resizeCanvas transform already (1 CSS pixel = 1 drawing unit)
+    // so we draw in world units and also scale to fit by drawing inside a transform
+    // We'll map world to canvas size proportionally:
+    const cw = canvas.clientWidth;
+    const ch = parseInt(canvas.style.height,10) || Math.round(cw*(520/900));
+    ctx.save();
+    ctx.clearRect(0,0,cw,ch);
+
+    const sx = cw / world.w;
+    const sy = ch / world.h;
+    ctx.scale(sx, sy);
+
+    drawBackground();
+    drawBlocks();
+    drawBubbles(t);
+    drawPlayer();
+    drawMiniLegend();
+
+    ctx.restore();
+  }
+
+  function loop(t){
+    const dt = Math.min(0.04, (t - last) / 1000);
+    last = t;
+    if(hearts > 0){
+      update(dt);
+    }
+    render(t);
+    requestAnimationFrame(loop);
+  }
+
+  // ---------- Result Modal ----------
+  function openResult(title, starCount, body){
+    $("resultTitle").textContent = title;
+    $("resultStars").textContent = "⭐".repeat(Math.max(1, starCount));
+    $("resultBody").innerHTML = body;
+    $("overlayResult").style.display = "flex";
+  }
+  function closeResult(){
+    $("overlayResult").style.display = "none";
+  }
+
+  // ---------- Check Logic ----------
+  function checkWin(){
+    const L = currentLevel();
+    const name = ($("studentName").value || "").trim();
+    const rep = (t)=> (t||"").replaceAll("____", name || "____");
+
+    const missing = ["Subject","Greeting","Sentence","Closing"].filter(k=>!collected[k]);
+    if(missing.length){
+      openResult("Almost! 🌈", 1, `<p><b>Missing:</b> ${missing.join(", ")}</p><p>Go collect them!</p>`);
+      beep(220, 140);
+      return;
+    }
+
+    const combined = [collected.Subject, collected.Greeting, collected.Sentence, collected.Closing].join(" ");
+    if(isUnsafeText(combined)){
+      openResult("Not Safe 🚫", 1, `<p>This email includes private info.</p><p><b>Rule:</b> No passwords, phone number, or home address.</p>`);
+      beep(200, 160);
+      return;
+    }
+
+    // stars: 1) all collected 2) level-specific matches 3) all pieces are polite (we keep correct pieces polite)
+    let score = 1;
+
+    const okSubject = L.subject.includes(collected.Subject);
+    const okGreeting = L.greeting.includes(collected.Greeting);
+    const okSentence = L.sentence.includes(collected.Sentence);
+    const okClosing = L.closing.includes(collected.Closing);
+    if(okSubject && okGreeting && okSentence && okClosing) score = 3;
+    else score = 2;
+
+    setStars(score);
+
+    const preview = [
+      `To: Teacher`,
+      `Subject: ${rep(collected.Subject)}`,
+      "",
+      rep(collected.Greeting),
+      rep(collected.Sentence),
+      rep(collected.Closing)
+    ].join("\n");
+
+    if(score === 3){
+      const newSticker = unlockSticker();
+      popConfetti();
+      beep(980,80); setTimeout(()=>beep(1120,80), 90);
+      openResult("Perfect Email! 🎉", 3, `
+        <p>You built a kind + safe email!</p>
+        <div style="white-space:pre-wrap; background:#fff; border:2px solid rgba(31,42,55,.10); border-radius:16px; padding:10px; font-weight:1000; line-height:1.5;">
+${preview}
+        </div>
+        <p><b>Sticker unlocked:</b> <span style="font-size:22px;">${newSticker || "🏆"}</span></p>
+      `);
+    }else{
+      beep(420,120);
+      openResult("Nice Try! ⭐", score, `
+        <p>You earned <b>${score}</b> star(s).</p>
+        <p>Try collecting the best pieces for this level again.</p>
+      `);
+    }
+  }
+
+  // ---------- Controls ----------
+  $("howBtn").addEventListener("click", ()=> $("overlayHow").style.display="flex");
+  $("closeHow").addEventListener("click", ()=> $("overlayHow").style.display="none");
+  $("overlayHow").addEventListener("click", (e)=>{ if(e.target === $("overlayHow")) $("overlayHow").style.display="none"; });
+
+  $("closeResult").addEventListener("click", closeResult);
+  $("overlayResult").addEventListener("click", (e)=>{ if(e.target === $("overlayResult")) closeResult(); });
+
+  $("resetBtn").addEventListener("click", ()=>{
+    setHearts(3);
+    setStars(0);
+    resetCollected();
+    spawnBubbles();
+    showToast("🔁 Reset! Try again.");
+    beep(520,70);
+  });
+
+  $("nextBtn").addEventListener("click", ()=>{
+    level++;
+    setHearts(3);
+    setStars(0);
+    resetCollected();
+    setHeaderGoal();
+    spawnBubbles();
+    showToast("➡️ Next Level!");
+    beep(860,70);
+  });
+
+  $("checkBtn").addEventListener("click", checkWin);
+
+  $("readBtn").addEventListener("click", ()=>{
+    const name = ($("studentName").value || "").trim();
+    const rep = (t)=> (t||"").replaceAll("____", name || "____");
+    const parts = [
+      "To: Teacher",
+      "Subject: " + rep(collected.Subject || ""),
+      rep(collected.Greeting || ""),
+      rep(collected.Sentence || ""),
+      rep(collected.Closing || "")
+    ].filter(Boolean).join(". ");
+    speak(parts);
+  });
+
+  $("studentName").addEventListener("input", updateSlots);
+
+  // ---------- Start ----------
+  makeBlocks();
+  renderStickers();
+  setHearts(3);
+  setStars(0);
+  resetCollected();
+  setHeaderGoal();
+  spawnBubbles();
+
+  // Resize on load + on window change
+  function doResize(){
+    resizeCanvas();
+    // also redraw once
+    render(performance.now());
+  }
+  window.addEventListener("resize", doResize);
+  doResize();
+
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
